@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="faixa_etaria"/>
+        <attribute name="authors" value="vinicius.sgameleira"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2025-08-27 04:45:31 "/>
+        <attribute name="created" value="dmluaWNpdXMuc2dhbWVsZWlyYTtTQU4wNjc0NDIxVzExLTE7MjAyNS0wOC0yNzsiMDQ6MzI6MTEgIjs0MDI3"/>
+        <attribute name="edited" value="dmluaWNpdXMuc2dhbWVsZWlyYTtTQU4wNjc0NDIxVzExLTE7MjAyNS0wOC0yNzsiMDQ6NDU6MzEgIjsxOzQxNDE="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="idade" type="Integer" array="False" size=""/>
+            <declare name="nome, faixaEtaria" type="String" array="False" size=""/>
+            <output expression="&quot;Nome do Cliente:&quot;" newline="True"/>
+            <input variable="nome"/>
+            <output expression="&quot;Idade do Cliente:&quot;" newline="True"/>
+            <input variable="idade"/>
+            <if expression="(idade &lt; 12)">
+                <then>
+                    <assign variable="faixaEtaria" expression="&quot;Crian&#231;a&quot;"/>
+                    <output expression="&quot;Acesso Negado! Apenas maior de 18 pode ingressar!&quot;" newline="True"/>
+                    <output expression="&quot;Voc&#234; &#233; &quot; &amp; faixaEtaria" newline="True"/>
+                </then>
+                <else>
+                    <if expression="(idade &gt;= 12) &amp;&amp; (idade &lt; 18)">
+                        <then>
+                            <assign variable="faixaEtaria" expression="&quot;Adolescente&quot;"/>
+                            <output expression="&quot;Acesso Negado! Apenas maior de 18 pode ingressar!&quot;" newline="True"/>
+                            <output expression="&quot;Voc&#234; &#233; &quot; &amp; faixaEtaria" newline="True"/>
+                        </then>
+                        <else>
+                            <if expression="(idade &gt;= 18) &amp;&amp; (idade &lt;= 25)">
+                                <then>
+                                    <assign variable="faixaEtaria" expression="&quot;Jovem&quot;"/>
+                                    <output expression="&quot;Bem vindo, &quot; &amp; nome" newline="True"/>
+                                    <output expression="&quot;Voc&#234; &#233; &quot; &amp; faixaEtaria" newline="True"/>
+                                </then>
+                                <else>
+                                    <if expression="(idade &gt; 25) &amp;&amp; (idade &lt;= 60)">
+                                        <then>
+                                            <assign variable="faixaEtaria" expression="&quot;Adulto&quot;"/>
+                                            <output expression="&quot;Bem vindo, &quot; &amp; nome" newline="True"/>
+                                            <output expression="&quot;Voc&#234; &#233; &quot; &amp; faixaEtaria" newline="True"/>
+                                        </then>
+                                        <else>
+                                            <assign variable="faixaEtaria" expression="&quot;Melhor idade&quot;"/>
+                                            <output expression="&quot;Bem vindo, &quot; &amp; nome" newline="True"/>
+                                            <output expression="&quot;Voc&#234; &#233; &quot; &amp; faixaEtaria" newline="True"/>
+                                        </else>
+                                    </if>
+                                </else>
+                            </if>
+                        </else>
+                    </if>
+                </else>
+            </if>
+        </body>
+    </function>
+</flowgorithm>
