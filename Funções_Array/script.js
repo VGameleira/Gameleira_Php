@@ -1,89 +1,140 @@
-// Função para alternar entre as abas do conteúdo
+// Alterna entre as abas
 function mostrarAba(indice) {
-    const abas = document.querySelectorAll('.aba'); // Seleciona todas as abas
-    const conteudosAbas = document.querySelectorAll('.conteudo-aba'); // Seleciona todos os conteúdos das abas
+    const abas = document.querySelectorAll('.aba');
+    const conteudosAbas = document.querySelectorAll('.conteudo-aba');
 
-    // Remove a classe 'ativa' de todas as abas e conteúdos
     abas.forEach(aba => aba.classList.remove('ativa'));
     conteudosAbas.forEach(conteudo => conteudo.classList.remove('ativa'));
 
-    // Adiciona a classe 'ativa' na aba e conteúdo selecionados
     abas[indice].classList.add('ativa');
     conteudosAbas[indice].classList.add('ativa');
 }
 
-// Função para mostrar o exemplo de código PHP de inserção de itens no array
+// Exemplo dinâmico para inserção
 function mostrarExemploInsercao() {
-    // Obtém o método selecionado e os valores dos campos do formulário
     const metodo = document.getElementById('metodo_insercao').value;
     const arrayBase = document.getElementById('array_base').value.split(',').map(e => e.trim());
     const itens = document.getElementById('itens_adicionar').value.split(',').map(e => e.trim());
 
-    // Monta o início do código PHP de exemplo
-    let codigo = "$frutas = [\"" + arrayBase.join('\", \"') + "\"];\n";
-    // Adiciona o exemplo conforme o método escolhido
+    let codigo = `$frutas = ["${arrayBase.join('", "')}"];\n`;
     switch(metodo) {
         case 'colchetes':
-            // Adiciona cada item usando colchetes
             codigo += `$frutas[] = "${itens.join('";\n$frutas[] = "')}";`;
             break;
         case 'push':
-            // Usa array_push para adicionar todos os itens
             codigo += `array_push($frutas, "${itens.join('", "')}");`;
             break;
         case 'splice':
-            // Usa array_splice para inserir itens na posição 1
             codigo += `array_splice($frutas, 1, 0, ["${itens.join('", "')}"]);`;
             break;
         case 'merge':
-            // Usa array_merge para juntar arrays
             codigo += `$frutas = array_merge($frutas, ["${itens.join('", "')}"]);`;
             break;
         case 'spread':
-            // Usa operador spread (PHP 7.4+) para juntar arrays
             codigo += `$frutas = [...$frutas, "${itens.join('", "')}"];`;
             break;
     }
-    // Exibe o código de exemplo no elemento da página
+    codigo += `\nprint_r($frutas);`;
     document.getElementById('exemplo-insercao').innerText = codigo;
 }
 
-// Função para mostrar o exemplo de código PHP das funções de array
+// Exemplo dinâmico para remoção
+function mostrarExemploRemocao() {
+    const metodo = document.getElementById('metodo_remocao').value;
+    const array = document.getElementById('array_remover').value.split(',').map(e => e.trim());
+
+    let codigo = `$frutas = ["${array.join('", "')}"];\n`;
+    switch(metodo) {
+        case 'unset':
+            codigo += `unset($frutas[1]); // Remove o índice 1`;
+            break;
+        case 'pop':
+            codigo += `array_pop($frutas); // Remove o último`;
+            break;
+        case 'shift':
+            codigo += `array_shift($frutas); // Remove o primeiro`;
+            break;
+        case 'splice':
+            codigo += `array_splice($frutas, 1, 2); // Remove dois itens a partir do índice 1`;
+            break;
+        case 'diff':
+            codigo += `$frutas = array_diff($frutas, ["Banana"]); // Remove todas as "Banana"`;
+            break;
+    }
+    codigo += `\nprint_r($frutas);`;
+    document.getElementById('exemplo-remocao').innerText = codigo;
+}
+
+// Exemplo dinâmico para organização
+function mostrarExemploOrganizacao() {
+    const metodo = document.getElementById('metodo_organizacao').value;
+    const array = document.getElementById('array_organizar').value.split(',').map(e => e.trim());
+
+    let codigo = `$frutas = ["${array.join('", "')}"];\n`;
+    switch(metodo) {
+        case 'sort':
+            codigo += `sort($frutas); // Ordena em ordem alfabética`;
+            break;
+        case 'rsort':
+            codigo += `rsort($frutas); // Ordem reversa`;
+            break;
+        case 'asort':
+            codigo += `asort($frutas); // Mantém os índices originais`;
+            break;
+        case 'ksort':
+            codigo += `ksort($frutas); // Ordena pelas chaves`;
+            break;
+        case 'shuffle':
+            codigo += `shuffle($frutas); // Embaralha os itens`;
+            break;
+        case 'array_reverse':
+            codigo += `$frutas = array_reverse($frutas); // Inverte a ordem`;
+            break;
+    }
+    codigo += `\nprint_r($frutas);`;
+    document.getElementById('exemplo-organizacao').innerText = codigo;
+}
+
+// Exemplo dinâmico para funções utilitárias
 function mostrarExemploFuncao() {
-    // Obtém a função selecionada e os valores do array do formulário
     const funcao = document.getElementById('funcao_array').value;
     const array = document.getElementById('array_teste').value.split(',').map(e => e.trim());
-    let codigo = "$frutas = [\"" + array.join('\", \"') + "\"];\n";
 
-    // Adiciona o exemplo conforme a função escolhida
+    let codigo = `$frutas = ["${array.join('", "')}"];\n`;
     switch(funcao) {
-        case 'array_pop':
-            // Remove o último item do array
-            codigo += "array_pop($frutas); // remove o último item\n";
-            break;
-        case 'array_shift':
-            // Remove o primeiro item do array
-            codigo += "array_shift($frutas); // remove o primeiro item\n";
-            break;
-        case 'array_slice':
-            // Pega uma parte do array
-            codigo += "$nova = array_slice($frutas, 1, 3); // pega parte do array\n";
-            break;
-        case 'array_diff':
-            // Remove elementos iguais ao outro array
-            codigo += "$outra = ['Banana'];\n$nova = array_diff($frutas, $outra); // remove elementos iguais\n";
+        case 'array_unique':
+            codigo += `$frutas = array_unique($frutas); // Remove duplicatas`;
             break;
         case 'array_values':
-            // Reindexa o array
-            codigo += "$frutas = array_values($frutas); // reindexa o array\n";
+            codigo += `$frutas = array_values($frutas); // Reindexa`;
             break;
-        default:
-            // Aplica a função diretamente
-            codigo += `${funcao}($frutas);\n`;
+        case 'array_search':
+            codigo += `$pos = array_search("Banana", $frutas);\necho $pos; // Posição de "Banana"`;
+            break;
+        case 'array_keys':
+            codigo += `$chaves = array_keys($frutas);\nprint_r($chaves);`;
+            break;
+        case 'array_map':
+            codigo += `$maiusculas = array_map('strtoupper', $frutas);\nprint_r($maiusculas);`;
+            break;
+        case 'array_filter':
+            codigo += `$filtrado = array_filter($frutas, fn($v) => strlen($v) > 4);\nprint_r($filtrado);`;
+            break;
+        case 'array_reduce':
+            codigo += `$resultado = array_reduce($frutas, fn($c,$i) => $c.$i."-", "");\necho $resultado;`;
+            break;
+        case 'count':
+            codigo += `echo count($frutas); // Número de itens`;
+            break;
+        case 'in_array':
+            codigo += `echo in_array("Uva", $frutas) ? "Existe" : "Não existe";`;
+            break;
+        case 'implode':
+            codigo += `$str = implode(" | ", $frutas);\necho $str;`;
+            break;
+        case 'explode':
+            codigo += `$str = "Maçã|Banana|Laranja|Uva";\n$nova = explode("|", $str);\nprint_r($nova);`;
+            break;
     }
-    // Adiciona a impressão do array no final
-    codigo += "print_r($frutas);";
-
-    // Exibe o código de exemplo no elemento da página
     document.getElementById('exemplo-funcao').innerText = codigo;
 }
