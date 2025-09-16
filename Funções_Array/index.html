@@ -3,181 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo de Arrays em PHP</title>
     <link rel="stylesheet" href="style.css">
+
     <script src="script.js" defer></script>
-    <title>Arrays em PHP</title>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Guia Completo de Arrays em PHP</h1>
-            <p>Aprenda a criar, manipular, organizar e remover itens de arrays de forma prática e interativa.</p>
-        </header>
+<div class="container">
+    <header>
+        <h1>Guia Interativo de Arrays em PHP</h1>
+        <p>Experimente, veja o código gerado e execute exemplos — ideal para aprender.</p>
+    </header>
 
-        <div class="abas">
-            <div class="aba ativa" onclick="mostrarAba(0)">Tipos de Arrays</div>
-            <div class="aba" onclick="mostrarAba(1)">Inserção de Itens</div>
-            <div class="aba" onclick="mostrarAba(2)">Remoção de Itens</div>
-            <div class="aba" onclick="mostrarAba(3)">Organização de Arrays</div>
-            <div class="aba" onclick="mostrarAba(4)">Funções de Array</div>
+    <div class="abas">
+        <div class="aba ativa" onclick="mostrarAba(0)">Tipos (explicação)</div>
+        <div class="aba" onclick="mostrarAba(1)">Inserção</div>
+        <div class="aba" onclick="mostrarAba(2)">Remoção</div>
+        <div class="aba" onclick="mostrarAba(3)">Organização</div>
+        <div class="aba" onclick="mostrarAba(4)">Funções</div>
+        <div class="aba" onclick="mostrarAba(5)">Associativos</div>
+        <div class="aba" onclick="mostrarAba(6)">Comparador</div>
+        <!-- <div class="aba" onclick="mostrarAba(7)">Tente Você Mesmo</div> -->
+    </div>
+
+    <!-- Tipos -->
+    <div class="conteudo-aba ativa">
+        <div class="descricao">
+            <p>Tipos de arrays em PHP:</p>
+            <ul>
+                <li><strong>Indexados</strong> — índices numéricos automáticos</li>
+                <li><strong>Associativos</strong> — chaves nomeadas (string/int)</li>
+                <li><strong>Multidimensionais</strong> — arrays dentro de arrays</li>
+            </ul>
         </div>
+    </div>
 
-        <!-- Tipos de Arrays -->
-        <div class="conteudo-aba ativa">
-            <div class="descricao">
-                <p>PHP possui três tipos principais de arrays:</p>
-                <ul>
-                    <li><strong>Indexados</strong> – índices numéricos automáticos</li>
-                    <li><strong>Associativos</strong> – índices nomeados</li>
-                    <li><strong>Multidimensionais</strong> – arrays dentro de arrays</li>
-                </ul>
+    <!-- Inserção (mantive interativo) -->
+    <div class="conteudo-aba">
+        <div class="descricao">
+            <p>Adicionar itens aos arrays — veja o código antes de enviar.</p>
+        </div>
+        <form id="form-insercao" method="POST" action="funcaoArray.php" oninput="mostrarExemploInsercao()">
+            <input type="hidden" name="acao" value="inserir_itens">
+            <label>Array Base:</label>
+            <input type="text" id="array_base" name="array_base" value="Maçã, Banana, Laranja">
+            <label>Itens para Adicionar:</label>
+            <input type="text" id="itens_adicionar" name="itens_adicionar" value="Uva, Manga">
+            <label>Método de Inserção:
+                <span class="help-icon" data-fn="insercao" title="Ajuda">?</span>
+            </label>
+            <select id="metodo_insercao" name="metodo_insercao">
+                <option value="colchetes">Colchetes []</option>
+                <option value="push">array_push()</option>
+                <option value="splice">array_splice()</option>
+                <option value="merge">array_merge()</option>
+                <option value="spread">Operador spread (...)</option>
+            </select>
+            <button type="submit">Inserir Itens</button>
+        </form>
+        <button class="copy-btn" onclick="copyCode('exemplo-insercao')">Copiar</button>
+        <pre class="exibicao-array" id="exemplo-insercao"></pre>
+    </div>
+
+    <!-- Remoção -->
+    <div class="conteudo-aba">
+        <div class="descricao">
+            <p>Remover itens — controle índices e veja o código gerado.</p>
+        </div>
+        <form id="form-remocao" method="POST" action="funcaoArray.php" onsubmit="return submitRemocao(event)" oninput="mostrarExemploRemocao()">
+            
+            <input type="hidden" name="acao" value="remover_itens">
+            <label>Array Base:</label>
+            <input type="text" id="array_remover" name="array_remover" value="Maçã, Banana, Laranja, Uva, Manga">
+            <label>Método de Remoção:
+                <span class="help-icon" data-fn="remocao" title="Ajuda">?</span>
+            </label>
+            <select id="metodo_remocao" name="metodo_remocao" onchange="toggleRemocaoControls()">
+                <option value="unset">unset()</option>
+                <option value="pop">array_pop()</option>
+                <option value="shift">array_shift()</option>
+                <option value="splice">array_splice()</option>
+                <option value="diff">array_diff()</option>
+            </select>
+
+            <div id="remocao-controls" style="margin-top:8px;">
+                <label class="small">Índice (para unset / splice):</label>
+                <input type="number" id="remover_index" name="remover_index" min="0" placeholder="0">
+                <label class="small">Comprimento (apenas para splice):</label>
+                <input type="number" id="remover_length" name="remover_length" min="0" placeholder="1">
+                <label class="small">Valores para array_diff (se aplicável):</label>
+                <input type="text" id="remover_diff_values" name="remover_diff_values" placeholder="Banana, Uva">
             </div>
 
-            <form method="POST" action="funcaoArray.php">
-                <input type="hidden" name="acao" value="criar_arrays">
-                <label>Itens Indexados:</label>
-                <input type="text" name="itens_indexados" value="Maçã, Banana, Laranja, Uva">
-                <label>Itens Associativos (chave:valor):</label>
-                <input type="text" name="itens_associativos" value="nome:João,idade:30,cidade:São Paulo">
-                <label>Linhas Array Multidimensional:</label>
-                <input type="number" name="linhas_multidimensionais" value="3" min="1" max="10">
-                <button type="submit">Criar Arrays</button>
-            </form>
+            <div id="msg-remocao" class="dica" style="display:none;"></div>
+
+            <button type="submit" id="btn-remover">Remover Itens</button>
+        </form>
+
+        <button class="copy-btn" onclick="copyCode('exemplo-remocao')">Copiar</button>
+        <pre class="exibicao-array" id="exemplo-remocao"></pre>
+    </div>
+
+    <!-- Organização -->
+    <div class="conteudo-aba">
+        <div class="descricao">
+            <p>Organize arrays — escolha o método e confira o resultado.</p>
+        </div>
+        <form id="form-organizacao" method="POST" action="funcaoArray.php" onsubmit="return submitOrganizacao(event)" oninput="mostrarExemploOrganizacao()">
+            <input type="hidden" name="acao" value="organizar_array">
+            <label>Array para Organizar:</label>
+            <input type="text" id="array_organizar" name="array_organizar" value="Maçã, Banana, Laranja, Uva">
+            <label>Método de Organização:
+                <span class="help-icon" data-fn="organizacao" title="Ajuda">?</span>
+            </label>
+            <select id="metodo_organizacao" name="metodo_organizacao">
+                <option value="sort">sort()</option>
+                <option value="rsort">rsort()</option>
+                <option value="asort">asort()</option>
+                <option value="ksort">ksort()</option>
+                <option value="shuffle">shuffle()</option>
+                <option value="array_reverse">array_reverse()</option>
+            </select>
+            <button type="submit">Organizar</button>
+        </form>
+
+        <button class="copy-btn" onclick="copyCode('exemplo-organizacao')">Copiar</button>
+        <pre class="exibicao-array" id="exemplo-organizacao"></pre>
+    </div>
+
+    <!-- Funções -->
+    <div class="conteudo-aba">
+        <div class="descricao">
+            <p>Funções úteis. Ao selecionar uma função aparecerá uma explicação passo-a-passo.</p>
+        </div>
+        <form id="form-funcoes" method="POST" action="funcaoArray.php" onsubmit="return submitFuncao(event)" oninput="mostrarExemploFuncao()">
+            <input type="hidden" name="acao" value="testar_funcoes">
+            <label>Array para Testar:</label>
+            <input type="text" id="array_teste" name="array_teste" value="Maçã, Banana, Laranja, Uva, Banana, Manga">
+            <label>Função:
+                <span class="help-icon" data-fn="funcoes" title="Ajuda">?</span>
+            </label>
+            <select id="funcao_array" name="funcao_array" onchange="updateFunctionInfo()">
+                <option value="array_unique">array_unique()</option>
+                <option value="array_values">array_values()</option>
+                <option value="array_search">array_search()</option>
+                <option value="array_keys">array_keys()</option>
+                <option value="array_map">array_map()</option>
+                <option value="array_filter">array_filter()</option>
+                <option value="array_reduce">array_reduce()</option>
+                <option value="count">count()</option>
+                <option value="in_array">in_array()</option>
+                <option value="implode">implode()</option>
+                <option value="explode">explode()</option>
+            </select>
+            <button type="submit">Testar Função</button>
+        </form>
+
+        <div id="funcao-info" class="func-info"></div>
+
+        <button class="copy-btn" onclick="copyCode('exemplo-funcao')">Copiar</button>
+        <pre class="exibicao-array" id="exemplo-funcao"></pre>
+
+        <div id="funcao-result" class="result-box" style="display:none;"></div>
+    </div>
+
+    <!-- Associativos (simulador) -->
+    <div class="conteudo-aba">
+        <div class="descricao">
+            <p>Simulador de arrays associativos — adicione chaves/valores dinamicamente e gere o código PHP.</p>
         </div>
 
-        <!-- Inserção de Itens -->
-        <div class="conteudo-aba">
-            <div class="descricao">
-                <p>Aprenda a adicionar novos elementos ao array:</p>
-                <ul>
-                    <li><strong>[]</strong> – adiciona no final</li>
-                    <li><strong>array_push()</strong> – adiciona um ou mais itens</li>
-                    <li><strong>array_splice()</strong> – insere em qualquer posição</li>
-                    <li><strong>array_merge()</strong> – junta dois arrays</li>
-                    <li><strong>spread (...)</strong> – expande arrays</li>
-                </ul>
-            </div>
-            <form method="POST" action="funcaoArray.php" oninput="mostrarExemploInsercao()">
-                <input type="hidden" name="acao" value="inserir_itens">
-                <label>Array Base:</label>
-                <input type="text" id="array_base" name="array_base" value="Maçã, Banana, Laranja">
-                <label>Itens para Adicionar:</label>
-                <input type="text" id="itens_adicionar" name="itens_adicionar" value="Uva, Manga">
-                <label>Método de Inserção:</label>
-                <select id="metodo_insercao" name="metodo_insercao">
-                    <option value="colchetes">Colchetes []</option>
-                    <option value="push">array_push()</option>
-                    <option value="splice">array_splice()</option>
-                    <option value="merge">array_merge()</option>
-                    <option value="spread">Operador spread (...)</option>
-                </select>
-                <button type="submit">Inserir Itens</button>
-            </form>
-            <pre class="exibicao-array" id="exemplo-insercao"></pre>
+        <div class="secao-formulario">
+            <div id="assoc-rows" class="assoc-rows"></div>
+            <button onclick="addAssocRow()" type="button">Adicionar chave + valor</button>
+            <button onclick="resetAssoc()" type="button">Limpar</button>
+            <button onclick="generateAssocPreview()" type="button">Gerar Pré-visualização</button>
+            <div id="assoc-preview" class="result-box" style="display:none;"></div>
+            <pre class="exibicao-array" id="exemplo-associativo"></pre>
+        </div>
+    </div>
+
+    <!-- Comparador(em teste) -->
+    <div class="conteudo-aba">
+        <div class="descricao">
+            <p>Comparador de métodos — compare resultados lado a lado (ex.: array_merge vs +).</p>
         </div>
 
-   <!-- Remoção de Itens -->
-<div class="conteudo-aba">
-    <div class="descricao">
-        <p>Métodos para remover itens de arrays:</p>
-        <ul>
-            <li><strong>unset()</strong> – remove um índice específico</li>
-            <li><strong>array_pop()</strong> – remove o último item</li>
-            <li><strong>array_shift()</strong> – remove o primeiro item</li>
-            <li><strong>array_splice()</strong> – remove uma faixa de itens</li>
-            <li><strong>array_diff()</strong> – remove valores comparando com outro array</li>
-        </ul>
+        <form id="form-compare" onsubmit="return submitCompare(event)">
+            <label>Array Base:</label>
+            <input type="text" id="compare_base" value="A, B, C">
+            <label>Outro Array (para comparar merge/+:)</label>
+            <input type="text" id="compare_other" value="X, Y">
+            <label>Método A:</label>
+            <select id="compare_a">
+                <option value="array_merge">array_merge</option>
+                <option value="plus">+</option>
+            </select>
+            <label>Método B:</label>
+            <select id="compare_b">
+                <option value="plus">+</option>
+                <option value="array_merge">array_merge</option>
+            </select>
+            <button type="submit">Comparar</button>
+        </form>
+
+        <div id="compare-result" class="result-box" style="display:none;"></div>
     </div>
-    <form method="POST" action="funcaoArray.php" oninput="mostrarExemploRemocao()">
-        <input type="hidden" name="acao" value="remover_itens">
-        <label>Array Base:</label>
-        <input type="text" id="array_remover" name="array_remover" value="Maçã, Banana, Laranja, Uva, Manga">
-        <label>Método de Remoção:</label>
-        <select id="metodo_remocao" name="metodo_remocao">
-            <option value="unset">unset()</option>
-            <option value="pop">array_pop()</option>
-            <option value="shift">array_shift()</option>
-            <option value="splice">array_splice()</option>
-            <option value="diff">array_diff()</option>
-        </select>
-        <button type="submit">Remover Itens</button>
-    </form>
-    <pre class="exibicao-array" id="exemplo-remocao"></pre>
+
+    <!-- Tente Você Mesmo (Ideia que não foi implementada) -->
+    <!-- <div class="conteudo-aba">
+        <div class="descricao">
+            <p>Editor PHP — escreva um código curto e execute no servidor <span style="color:#e74c3c;">(apenas para uso local/teste)</span>.</p>
+        </div>
+
+        <textarea id="user_code" style="width:100%; height:180px;">
+// escreva código PHP (sem <?php ?>). Exemplo:
+echo "Olá do PHP!\n";
+$frutas = ["Maçã","Banana","Laranja"];
+print_r($frutas);
+        </textarea>
+        <div style="margin-top:8px;">
+            <button onclick="runUserCode()">Executar</button>
+            <button onclick="document.getElementById('user_code').value='';">Limpar</button>
+        </div>
+
+        <div id="try-result" class="result-box" style="display:none; white-space:pre-wrap;"></div>
+
+        <div class="dica" style="margin-top:10px;">
+            <strong>Atenção:</strong> o código é executado no servidor. Não use este editor em servidor público / produção sem segurança adequada.
+        </div>
+    </div> -->
 </div>
-
-<!-- Organização de Arrays -->
-<div class="conteudo-aba">
-    <div class="descricao">
-        <p>Funções para organizar arrays:</p>
-        <ul>
-            <li><strong>sort()</strong> – ordena valores</li>
-            <li><strong>rsort()</strong> – ordena em ordem reversa</li>
-            <li><strong>asort()</strong> – ordena mantendo índices</li>
-            <li><strong>ksort()</strong> – ordena pelas chaves</li>
-            <li><strong>shuffle()</strong> – embaralha</li>
-            <li><strong>array_reverse()</strong> – inverte a ordem</li>
-        </ul>
-    </div>
-    <form method="POST" action="funcaoArray.php" oninput="mostrarExemploOrganizacao()">
-        <input type="hidden" name="acao" value="organizar_array">
-        <label>Array para Organizar:</label>
-        <input type="text" id="array_organizar" name="array_organizar" value="Maçã, Banana, Laranja, Uva">
-        <label>Método de Organização:</label>
-        <select id="metodo_organizacao" name="metodo_organizacao">
-            <option value="sort">sort()</option>
-            <option value="rsort">rsort()</option>
-            <option value="asort">asort()</option>
-            <option value="ksort">ksort()</option>
-            <option value="shuffle">shuffle()</option>
-            <option value="array_reverse">array_reverse()</option>
-        </select>
-        <button type="submit">Organizar</button>
-    </form>
-    <pre class="exibicao-array" id="exemplo-organizacao"></pre>
-</div>
-
-<!-- Funções de Array -->
-<div class="conteudo-aba">
-    <div class="descricao">
-        <p>Funções úteis para manipulação de arrays:</p>
-        <ul>
-            <li><strong>array_unique()</strong> – remove duplicatas</li>
-            <li><strong>array_values()</strong> – reindexa</li>
-            <li><strong>array_search()</strong> – busca valor</li>
-            <li><strong>array_keys()</strong> – retorna todas as chaves</li>
-            <li><strong>array_map()</strong> – aplica função em cada elemento</li>
-            <li><strong>array_filter()</strong> – filtra itens</li>
-            <li><strong>array_reduce()</strong> – reduz array a um valor</li>
-            <li><strong>count()</strong> – retorna o tamanho</li>
-            <li><strong>in_array()</strong> – verifica se um valor existe</li>
-            <li><strong>implode()</strong> – junta os itens em string</li>
-            <li><strong>explode()</strong> – quebra string em array</li>
-        </ul>
-    </div>
-    <form method="POST" action="funcaoArray.php" oninput="mostrarExemploFuncao()">
-        <input type="hidden" name="acao" value="testar_funcoes">
-        <label>Array para Testar:</label>
-        <input type="text" id="array_teste" name="array_teste" value="Maçã, Banana, Laranja, Uva, Banana, Manga">
-        <label>Função:</label>
-        <select id="funcao_array" name="funcao_array">
-            <option value="array_unique">array_unique()</option>
-            <option value="array_values">array_values()</option>
-            <option value="array_search">array_search()</option>
-            <option value="array_keys">array_keys()</option>
-            <option value="array_map">array_map()</option>
-            <option value="array_filter">array_filter()</option>
-            <option value="array_reduce">array_reduce()</option>
-            <option value="count">count()</option>
-            <option value="in_array">in_array()</option>
-            <option value="implode">implode()</option>
-            <option value="explode">explode()</option>
-        </select>
-        <button type="submit">Testar Função</button>
-    </form>
-    <pre class="exibicao-array" id="exemplo-funcao"></pre>
-</div>
-
-
-
 </body>
 </html>
