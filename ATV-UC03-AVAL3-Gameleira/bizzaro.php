@@ -4,8 +4,9 @@
 // b-Calcule e exiba a soma de todos os números.
 // c-Inverta a ordem dos elementos no array usando arsort() e exiba o resultado.
 
-$numeros = $_POST['numeros'] ?? range(1, 10); // Se não vier do formulário, usa de 1 a 10
+// $numeros = $_POST['numeros'] ?? [];
 
+$numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 // a) Exiba todos os números do array
 echo "<h2>Números do array:</h2>";
 echo implode(", ", $numeros) . "<br>";
@@ -54,7 +55,7 @@ foreach ($estoque as $produto) {
 
 // Atualize o preço com desconto de 10%
 echo "<h2>Produtos com Desconto de 10%:</h2>";
-foreach ($estoque as &$produto) {
+foreach ($estoque as $produto) {
     $produto['preco'] *= 0.10; // Aplica desconto de 10%
     echo "<br>Produto: " . $produto['nome'] . "<br>";
     echo "Preço com desconto: R$ " . number_format($produto['preco'], 2, ',', '.') . '<br>';
@@ -64,7 +65,7 @@ foreach ($estoque as &$produto) {
 
 <?php
 // 3. Crie um array associativo com informações de 3 alunos (nome, idade e notaFinal). Depois:
- 
+
 //     a-Adicione 10 alunos e exiba as informações de cada aluno da seguinte forma:
 //        nome: Juca
 //        idade: 27 anos
@@ -93,14 +94,14 @@ echo "<h2>Informações dos Alunos:</h2>";
 // $media = $notaSoma / count($alunos);
 
 for ($i = 0; $i < count($alunos); $i++) {
-  
-    echo "Nome: ". $alunos[$i]["nome"] . "<br> Nota: " . $alunos[$i]["notaFinal"] . "<br>";
+
+    echo "Nome: " . $alunos[$i]["nome"] . "<br> Nota: " . $alunos[$i]["notaFinal"] . "<br>";
 }
 
 $media = array_sum(array_column($alunos, 'notaFinal')) / count($alunos);
 
 
-echo "<br>Média das notas: " . number_format($media, 2, ',', '.') . "<br>";
+echo "<br>Média das notas: " . number_format($media, 1, ',', '.') . "<br>";
 
 
 ?>
