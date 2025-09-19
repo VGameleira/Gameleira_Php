@@ -6,8 +6,8 @@
 
 // $numeros = $_POST['numeros'] ?? [];
 
-$numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 // a) Exiba todos os números do array
+$numeros = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 echo "<h2>Números do array:</h2>";
 echo implode(", ", $numeros) . "<br>";
 
@@ -56,7 +56,7 @@ foreach ($estoque as $produto) {
 // Atualize o preço com desconto de 10%
 echo "<h2>Produtos com Desconto de 10%:</h2>";
 foreach ($estoque as $produto) {
-    $produto['preco'] *= 0.10; // Aplica desconto de 10%
+    $produto['preco'] *= 0.9; // Aplica desconto de 10%
     echo "<br>Produto: " . $produto['nome'] . "<br>";
     echo "Preço com desconto: R$ " . number_format($produto['preco'], 2, ',', '.') . '<br>';
 }
