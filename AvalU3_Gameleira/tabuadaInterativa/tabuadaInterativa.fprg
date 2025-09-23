@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="tabuadaInterativa"/>
+        <attribute name="authors" value="vinicius.sgameleira"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2025-09-03 05:00:55 "/>
+        <attribute name="created" value="dmluaWNpdXMuc2dhbWVsZWlyYTtTQU4wNjc0NDIxVzExLTE7MjAyNS0wOS0wMzsiMDM6MzA6NTQgIjs0MDI2"/>
+        <attribute name="edited" value="dmluaWNpdXMuc2dhbWVsZWlyYTtTQU4wNjc0NDIxVzExLTE7MjAyNS0wOS0wMzsiMDU6MDA6NTUgIjsyOzQxMzU="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="operacao" type="String" array="False" size=""/>
+            <declare name="num1, contador" type="Integer" array="False" size=""/>
+            <declare name="valorFinalAdicao, valorFinalSubtracao, valorFinalMultiplicacao, valorFinalDivisao" type="Integer" array="False" size=""/>
+            <output expression="&quot;Digite um n&#250;mero para ver a tabuada:&quot;" newline="True"/>
+            <input variable="num1"/>
+            <output expression="&quot;Qual opera&#231;&#227;o desejada, escolha entre adi&#231;&#227;o, subtra&#231;&#227;o, divis&#227;o, multiplica&#231;&#227;o ou todos&quot;" newline="True"/>
+            <input variable="operacao"/>
+            <if expression="operacao == &quot;adi&#231;&#227;o&quot; || operacao == &quot;adicao&quot; || operacao == &quot;Adicao&quot; || operacao == &quot;adi&#231;&#227;o&quot;">
+                <then>
+                    <for variable="contador" start="1" end="10" direction="inc" step="1">
+                        <assign variable="valorFinalAdicao" expression="num1 + contador"/>
+                        <output expression="num1 &amp; &quot; + &quot; &amp;  contador &amp; &quot; = &quot; &amp; valorFinalAdicao" newline="True"/>
+                    </for>
+                </then>
+                <else>
+                    <if expression="operacao == &quot;subtra&#231;&#227;o&quot; || operacao == &quot;subtracao&quot; || operacao == &quot;Subtra&#231;&#227;o&quot; || operacao == &quot;Subtracao&quot;">
+                        <then>
+                            <for variable="contador" start="1" end="10" direction="inc" step="1">
+                                <assign variable="valorFinalSubtracao" expression="num1 - contador"/>
+                                <output expression="num1 &amp; &quot; - &quot; &amp;  contador &amp; &quot; = &quot; &amp; valorFinalSubtracao" newline="True"/>
+                            </for>
+                        </then>
+                        <else>
+                            <if expression="operacao == &quot;multiplicacao&quot;|| operacao == &quot;Multiplicacao&quot; || operacao == &quot;multiplica&#231;&#227;o&quot; || operacao == &quot;Multiplica&#231;&#227;o&quot;">
+                                <then>
+                                    <for variable="contador" start="1" end="10" direction="inc" step="1">
+                                        <assign variable="valorFinalMultiplicacao" expression="num1 * contador"/>
+                                        <output expression="num1 &amp; &quot; x &quot; &amp;  contador &amp; &quot; = &quot; &amp; valorFinalMultiplicacao" newline="True"/>
+                                    </for>
+                                </then>
+                                <else>
+                                    <if expression="operacao == &quot;divisao&quot; || operacao == &quot;divis&#227;o&quot; || operacao == &quot;Divisao&quot; || operacao == &quot;Divis&#227;o&quot;">
+                                        <then>
+                                            <for variable="contador" start="1" end="10" direction="inc" step="1">
+                                                <assign variable="valorFinalDivisao" expression="num1 / contador"/>
+                                                <output expression="num1 &amp; &quot; / &quot; &amp;  contador &amp; &quot; = &quot; &amp; valorFinalDivisao" newline="True"/>
+                                            </for>
+                                        </then>
+                                        <else>
+                                            <if expression="operacao == &quot;todos&quot; || operacao == &quot;Todos&quot;">
+                                                <then>
+                                                    <for variable="contador" start="1" end="10" direction="inc" step="1">
+                                                        <assign variable="valorFinalAdicao" expression="num1 + contador"/>
+                                                        <assign variable="valorFinalSubtracao" expression="num1 - contador"/>
+                                                        <assign variable="valorFinalMultiplicacao" expression="num1 * contador"/>
+                                                        <assign variable="valorFinalDivisao" expression="num1 / contador"/>
+                                                        <output expression="num1 &amp; &quot; + &quot; &amp;  contador &amp; &quot; = &quot; &amp; valorFinalAdicao &amp;  &quot; | &quot; &amp;&#13;&#10;num1 &amp; &quot; - &quot; &amp;  contador &amp; &quot; = &quot; &amp; valorFinalSubtracao &amp;  &quot; | &quot; &amp;&#13;&#10;num1 &amp; &quot; x &quot; &amp;  contador &amp; &quot; = &quot; &amp; valorFinalMultiplicacao &amp;  &quot; | &quot; &amp;&#13;&#10;num1 &amp; &quot; / &quot; &amp;  contador &amp; &quot; = &quot; &amp; valorFinalDivisao &amp;  &quot; | &quot;" newline="True"/>
+                                                    </for>
+                                                </then>
+                                                <else>
+                                                    <output expression="&quot;Opera&#231;&#227;o inv&#225;lida.&quot;" newline="True"/>
+                                                </else>
+                                            </if>
+                                        </else>
+                                    </if>
+                                </else>
+                            </if>
+                        </else>
+                    </if>
+                </else>
+            </if>
+        </body>
+    </function>
+</flowgorithm>

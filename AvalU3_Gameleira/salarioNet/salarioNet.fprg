@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="salarioNet"/>
+        <attribute name="authors" value="vinicius.sgameleira"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2025-09-03 03:30:46 "/>
+        <attribute name="created" value="dmluaWNpdXMuc2dhbWVsZWlyYTtTQU4wNjc0NDIxVzExLTE7MjAyNS0wOS0wMzsiMDM6MTU6NDMgIjs0MDI3"/>
+        <attribute name="edited" value="dmluaWNpdXMuc2dhbWVsZWlyYTtTQU4wNjc0NDIxVzExLTE7MjAyNS0wOS0wMzsiMDM6MzA6NDYgIjs0OzQxMzg="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="valorHora, qtdHora, salarioBruto, salarioLiquido, imposto" type="Real" array="False" size=""/>
+            <assign variable="imposto" expression="0"/>
+            <output expression="&quot;Digite o valor da hora trabalhada.&quot;" newline="True"/>
+            <input variable="valorHora"/>
+            <output expression="&quot;Digite a quantidade de hora trabalhadas.&quot;" newline="True"/>
+            <input variable="qtdHora"/>
+            <assign variable="salarioBruto" expression="valorHora * qtdHora"/>
+            <if expression="salarioBruto &gt; 2000">
+                <then>
+                    <assign variable="imposto" expression="salarioBruto * 0.05"/>
+                    <assign variable="salarioLiquido" expression="salarioBruto - imposto"/>
+                    <output expression="&quot;Sal&#225;rio Bruto: R$ &quot; &amp; salarioBruto" newline="True"/>
+                    <output expression="&quot;Imposto aplicado: R$ &quot; &amp; imposto" newline="True"/>
+                    <output expression="&quot;Sal&#225;rio L&#237;quido: R$ &quot; &amp; salarioLiquido" newline="True"/>
+                </then>
+                <else>
+                    <assign variable="salarioLiquido" expression="salarioBruto - imposto"/>
+                    <output expression="&quot;Sal&#225;rio Bruto: R$ &quot; &amp; salarioBruto" newline="True"/>
+                    <output expression="&quot;Sal&#225;rio L&#237;quido: R$ &quot; &amp; salarioLiquido" newline="True"/>
+                </else>
+            </if>
+        </body>
+    </function>
+</flowgorithm>

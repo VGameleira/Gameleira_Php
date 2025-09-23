@@ -77,6 +77,7 @@ $alunos = [
     ["nome" => "Juca", "idade" => 27, "notaFinal" => 8.5],
     ["nome" => "Ana", "idade" => 22, "notaFinal" => 9.0],
     ["nome" => "Pedro", "idade" => 24, "notaFinal" => 7.5],
+    
     ["nome" => "Maria", "idade" => 23, "notaFinal" => 8.0],
     ["nome" => "Lucas", "idade" => 26, "notaFinal" => 6.5],
     ["nome" => "Carla", "idade" => 21, "notaFinal" => 9.5],
@@ -84,6 +85,9 @@ $alunos = [
     ["nome" => "Beatriz", "idade" => 22, "notaFinal" => 8.8],
     ["nome" => "Gustavo", "idade" => 24, "notaFinal" => 6.8],
     ["nome" => "Fernanda", "idade" => 23, "notaFinal" => 9.2],
+    ["nome" => "Tiago", "idade" => 28, "notaFinal" => 7.9],
+    ["nome" => "Mariana", "idade" => 20, "notaFinal" => 8.3],
+    ["nome" => "Juliana", "idade" => 22, "notaFinal" => 8.7],
 ];
 
 
