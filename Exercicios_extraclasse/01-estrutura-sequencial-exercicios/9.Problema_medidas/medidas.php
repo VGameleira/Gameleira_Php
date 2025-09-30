@@ -27,3 +27,10 @@ AREA DO TRAPEZIO = 90.4121  -->
 
 <?php
 
+$medida1 = $_POST["medida1"];
+$medida2 = $_POST["medida2"];
+$medida3 = $_POST["medida3"];
+
+$area_quadrado = $medida1 * $medida1;
+$area_triangulo = ($medida1 * $medida2) / 2;
+

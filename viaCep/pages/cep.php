@@ -7,6 +7,8 @@ if (!isset($cep) || strlen($cep) != 8) {
     $mensagem = "ERRO, VALORES INVÁLIDOS";
 } else {
     $url = "https://viacep.com.br/ws/{$cep}/json/";
+
+    
     $options = [
         "http" => [
             "method" => "GET",
@@ -68,3 +70,7 @@ if (!isset($cep) || strlen($cep) != 8) {
     <?php endif; ?>
 </body>
 </html>
+
+
+
+

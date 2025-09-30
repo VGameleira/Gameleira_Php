@@ -19,3 +19,12 @@ n2 = Number.parseInt(prompt("Digite o 2º valor:"));
 soma = n1 + n2;
 
 alert(`${n1} + ${n2} = ${soma}`); -->
+
+<?php
+$n1 = $_POST["n1"];
+$n2 = $_POST["n2"];
+
+$soma = $n1 + $n2;
+
+echo $n1 . " + " . $n2 . " = " . $soma;
+?>

@@ -24,4 +24,4 @@ $nome = $_POST["nome"];
 $vHora = $_POST["vHora"];
 $trabalhadas = $_POST["trabalhadas"];
 $total = $vHora * $trabalhadas;
-echo "O pagamento para " . $nome . " deve ser " . $total . PHP_EOL;
+echo "O pagamento para " . $nome . " deve ser " . $total;

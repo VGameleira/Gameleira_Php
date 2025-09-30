@@ -12,3 +12,13 @@ Digite a duracao em segundos: 12506
 Exemplo 3: 
 Digite a duracao em segundos: 140811
 39:6:51 -->
+
+
+<?php
+$segundos = $_POST["segundos"];
+
+$horas = (int)($segundos / 3600);
+$minutos = (int)(($segundos % 3600) / 60);
+
+echo $horas . "h:" . $minutos . "min:" . ($segundos % 60) . "s";
+?>
