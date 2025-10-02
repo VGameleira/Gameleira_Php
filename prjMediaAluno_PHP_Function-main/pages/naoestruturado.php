@@ -29,30 +29,29 @@ function mostrarResultadoFinal($mensagem, $resultado): string
 
 
 // mostrar hora de atual com function exibir()
-function exibir($DiaMesAno) {
-        $hora = time();
-        $DiaMesAno = date("d/m/Y", $hora);
-    
-        return $DiaMesAno;
-    }
-    
-    
-    function validarEntrada($nome,$notas) {
-        if (isset($_GET['nome']) && !empty($_GET['nome']) && isset($_GET['notas']) && is_array($notas) && count($notas) > 0) {
-            foreach ($notas as $nota) {
-                if (!is_numeric($nota) || $nota < 0 || $nota > 10) {
-                    return false;
-                }
+function horas(){
+    date_default_timezone_set("America/Sao_Paulo");
+    $hj = date("h:i:sa");
+    $hj2 = date("Y-m-d",time());
+    $diaHora = "{$hj2} <br><br> {$hj}";
+    return $diaHora;
+}
+ 
+function validarEntrada($nome, $notas) {
+    if (isset($nome) && !empty($nome) && is_string($nome) && isset($notas) && is_array($notas) && count($notas) > 0) {
+        foreach ($notas as $nota) {
+            if (!is_numeric($nota) || $nota < 0 || $nota > 10) {
+                return false;
             }
-            return true;
-        } else {
-            return false;
         }
+        return true;
+    } else {
+        return false;
     }
+}
 
-
-$nome = trim($_GET['nome']);
-$notas = $_GET['notas'];
+$nome = isset($_GET['nome']) ? trim($_GET['nome']) : '';
+$notas = isset($_GET['notas']) ? $_GET['notas'] : [];
 
 if (validarEntrada($nome, $notas)) {
     $media = calcular($notas);
@@ -62,20 +61,10 @@ if (validarEntrada($nome, $notas)) {
     exit();
 }
 
-$data = exibir($DiaMesAno);
-
-// if (!validarEntrada($nome, $notas)) {
-//     header("Location: ../index.html");
-//     exit();
-// } else {
-
-// $media = calcular($notas);
-// $result = valMedia($media);
-// } 
+$data = horas();
 
 mostrarMensagem(mensagem: "Olá, {$nome}! Sua média é: {$media}");
 
-// $mensagemBoasVindas = "Olá, {$nome}! Sua média é: {$media}";
 ?>
 
 <!DOCTYPE html>
