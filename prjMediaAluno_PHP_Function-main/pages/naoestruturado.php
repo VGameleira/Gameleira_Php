@@ -1,31 +1,83 @@
 <?php
 
-function calcularMedia(array $notas) {
-
-    $resultado = array_sum($notas) / count($notas);
-    return $resultado;
+function calcular($notasArray)
+{
+    return array_sum($notasArray) / count($notasArray);
 }
 
-function verificarAprovacao($media){
-    return $media>=7 ? "aprovado" : "reprovado";
+function valMedia($media)
+{
+    return $media >= 7 ? true : false;
 }
+
+function mostrarMensagem(string $mensagem): string
+{
+    return $mensagem;
+}
+
+function mostrarResultado(bool $resultado): string
+{
+    return $resultado ? "Parabéns, você foi aprovado!" : "Infelizmente, você foi reprovado.";
+}
+
+function mostrarResultadoFinal($mensagem, $resultado): string
+{
+    return "<p>{$mensagem}</p><p id='" . ($resultado ? "aprovado" : "reprovado") . "'>" . mostrarResultado($resultado) . "</p>";
+}
+
+
+
+
+// mostrar hora de atual com function exibir()
+function exibir($DiaMesAno) {
+        $hora = time();
+        $DiaMesAno = date("d/m/Y", $hora);
+    
+        return $DiaMesAno;
+    }
+    
+    
+    function validarEntrada($nome,$notas) {
+        if (isset($_GET['nome']) && !empty($_GET['nome']) && isset($_GET['notas']) && is_array($notas) && count($notas) > 0) {
+            foreach ($notas as $nota) {
+                if (!is_numeric($nota) || $nota < 0 || $nota > 10) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 $nome = trim($_GET['nome']);
 $notas = $_GET['notas'];
 
-// $media = array_sum($notas) / count($notas);
+if (validarEntrada($nome, $notas)) {
+    $media = calcular($notas);
+    $result = valMedia($media);
+} else {
+    header("Location: ../index.html");
+    exit();
+}
+
+$data = exibir($DiaMesAno);
+
+// if (!validarEntrada($nome, $notas)) {
+//     header("Location: ../index.html");
+//     exit();
+// } else {
+
+// $media = calcular($notas);
+// $result = valMedia($media);
+// } 
+
+mostrarMensagem(mensagem: "Olá, {$nome}! Sua média é: {$media}");
 
 // $mensagemBoasVindas = "Olá, {$nome}! Sua média é: {$media}";
-// if ($media >= 7) {
-//     $mensagemResultado = "Parabéns, você foi aprovado!";
-// } else {
-//     $mensagemResultado =  "Infelizmente, você foi reprovado.";
-// }
-
-
-
-
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -39,8 +91,9 @@ $notas = $_GET['notas'];
 <body>
     <main class="container">
         <h1>Performance do Aluno</h1>
-        <p><?= $mensagemBoasVindas ?></p>
-        <p id="<?= $media>=7 ? "aprovado" : "reprovado"; ?>"><?= $mensagemResultado ?></p>
+
+        <?= mostrarResultadoFinal(mostrarMensagem(mensagem: "Olá, {$nome}! Sua média é: {$media}"), $result) ?>
+        <p>Hoje é dia <?= $data ?></p>
     </main>
 </body>
 
