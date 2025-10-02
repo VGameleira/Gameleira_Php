@@ -52,6 +52,14 @@ const categories = [
             { name: 'Intersecção', id: 'intersecao' },
             { name: 'Diferença', id: 'diferenca' }
         ]
+    },
+    {
+        name: 'Strings',
+        icon: '✍️',
+        subcategories: [
+            { name: 'Transformação', id: 'string_transform' },
+            { name: 'Verificação', id: 'string_check' }
+        ]
     }
 ];
 
@@ -873,6 +881,76 @@ print_r($resultado);`,
             description: 'Diferença comparando chave e valor',
             complexity: 'O(n*m)',
             useCases: ['Detectar mudanças', 'Comparação de configs']
+        }
+    ],
+
+    string_transform: [
+        {
+            name: 'strtolower()',
+            code: `$texto = "OLÁPROGRAMADOR";
+$minusculo = strtolower($texto);
+echo $minusculo; // olaprogramador`,
+            description: 'Converte string para minúsculas',
+            complexity: 'O(n)',
+            useCases: ['Normalização de texto', 'Comparações case-insensitive', 'Formatação']
+        },
+        {
+            name: 'strtoupper()',
+            code: `$texto = "oláprogramador";
+$maiusculo = strtoupper($texto);
+echo $maiusculo; // OLAPROGRAMADOR`,
+            description: 'Converte string para maiúsculas',
+            complexity: 'O(n)',
+            useCases: ['Destaque de texto', 'Padronização', 'Formatação']
+        },
+        {
+            name: 'ucwords()',
+            code: `$texto = "olá mundo php";
+$capitalizado = ucwords($texto);
+echo $capitalizado; // Olá Mundo Php`,
+            description: 'Capitaliza primeira letra de cada palavra',
+            complexity: 'O(n)',
+            useCases: ['Formatação de nomes', 'Títulos', 'Cabeçalhos']
+        },
+        {
+            name: 'ucfirst()',
+            code: `$texto = "primeira letra maiúscula";
+$capitalizado = ucfirst($texto);
+echo $capitalizado; // Primeira letra maiúscula`,
+            description: 'Capitaliza primeira letra da string',
+            complexity: 'O(1)',
+            useCases: ['Formatação de frases', 'Nomes próprios', 'Sentenças']
+        }
+    ],
+
+    string_check: [
+        {
+            name: 'preg_match()',
+            code: `$texto = "Email: teste@email.com";
+$padrao = "/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/";
+if (preg_match($padrao, $texto, $matches)) {
+    echo "Email encontrado: " . $matches[0];
+}`,
+            description: 'Busca padrão em string usando expressão regular',
+            complexity: 'O(n)',
+            useCases: ['Validação de formato', 'Extração de dados', 'Busca avançada']
+        },
+        {
+            name: 'isset()',
+            code: `$array = ["nome" => "João"];
+
+// Verifica se chave existe
+if (isset($array["nome"])) {
+    echo "Nome definido: " . $array["nome"];
+}
+
+// Verifica múltiplas variáveis
+if (isset($nome, $idade, $email)) {
+    echo "Todas variáveis definidas";
+}`,
+            description: 'Verifica se variável está definida e não é NULL',
+            complexity: 'O(1)',
+            useCases: ['Validação de dados', 'Verificação de existência', 'Prevenção de erros']
         }
     ]
 };
