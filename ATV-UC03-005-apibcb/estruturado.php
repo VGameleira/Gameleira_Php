@@ -16,3 +16,24 @@ function validarEntradas($valor, $moeda) {
         exit;
     }
 }
+
+// ===============================
+// 2 Função: Exibe mensagens HTML
+// ===============================
+function exibirMensagem($mensagem) {
+    echo "<!DOCTYPE html>
+    <html lang='pt-br'>
+    <head>
+        <meta charset='UTF-8'>
+        <title>Erro</title>
+        <link rel='stylesheet' href='style.css'>
+    </head>
+    <body>
+        <div class='container'>
+            <h1>Aviso</h1>
+            <p>$mensagem</p>
+            <a href='index.html' class='voltar'>← Voltar</a>
+        </div>
+    </body>
+    </html>";
+}
