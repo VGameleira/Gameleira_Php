@@ -37,3 +37,12 @@ function exibirMensagem($mensagem) {
     </body>
     </html>";
 }
+
+
+// ===============================
+// 3️⃣ Função: Converte para Dólar
+// ===============================
+function converterDolar($valor) {
+    $cotacao = obterCotacao('USD');
+    return $valor / $cotacao;
+}
