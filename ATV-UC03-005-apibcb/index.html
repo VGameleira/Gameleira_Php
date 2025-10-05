@@ -1,31 +1,44 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8">
   <title>Conversor de Moedas BCB</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div class="container">
     <h1>Conversor de Moedas (BCB)</h1>
 
-    <form action="api.php" method="POST">
+    <form action="estruturado.php" method="POST">
       <label for="valor">Valor em Reais (BRL):</label>
       <input type="number" name="valor" id="valor" step="0.01" required>
 
       <label for="moeda">Converter para:</label>
       <select name="moeda" id="moeda" required>
-        <option value="USD">Dólar (USD)</option>
+        <option value="USD">Dólar Americano (USD)</option>
         <option value="EUR">Euro (EUR)</option>
-        <option value="GBP">Libra (GBP)</option>
+        <option value="GBP">Libra Esterlina (GBP)</option>
         <option value="ARS">Peso Argentino (ARS)</option>
         <option value="JPY">Iene Japonês (JPY)</option>
+        <option value="CAD">Dólar Canadense (CAD)</option>
+        <option value="AUD">Dólar Australiano (AUD)</option>
+        <option value="CHF">Franco Suíço (CHF)</option>
         <option value="CNY">Yuan Chinês (CNY)</option>
-        <option value="BTC">Bitcoin (BTC)</option>
+        <option value="CLP">Peso Chileno (CLP)</option>
+        <option value="MXN">Peso Mexicano (MXN)</option>
+        <option value="ZAR">Rand Sul-Africano (ZAR)</option>
+        <option value="SEK">Coroa Sueca (SEK)</option>
+        <option value="NOK">Coroa Norueguesa (NOK)</option>
+        <option value="DKK">Coroa Dinamarquesa (DKK)</option>
+        <option value="KRW">Won Sul-Coreano (KRW)</option>
+        <option value="INR">Rupia Indiana (INR)</option>
       </select>
 
       <button type="submit">Converter</button>
     </form>
   </div>
 </body>
+
 </html>
