@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Conversor de Moedas - Banco Central</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1> Conversor de Moedas (BCB)</h1>
+
+    <form action="converter.php" method="POST">
+      <input type="number" name="valor" placeholder="Valor em BRL" required>
+      
+      <select name="moeda" required>
+        <option value="USD">Dólar (USD)</option>
+        <option value="EUR">Euro (EUR)</option>
+        <option value="GBP">Libra (GBP)</option>
+        <option value="ARS">Peso Argentino (ARS)</option>
+        <option value="CAD">Dólar Canadense (CAD)</option>
+        <option value="JPY">Iene (JPY)</option>
+      </select>
+
+      <button type="submit">Converter</button>
+    </form>
+  </div>
+</body>
+</html>
