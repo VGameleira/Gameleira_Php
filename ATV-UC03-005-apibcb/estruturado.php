@@ -63,3 +63,33 @@ function converterMoeda($valor, $moeda) {
     $cotacao = obterCotacao($moeda);
     return $valor / $cotacao;
 }
+
+// ===============================
+// 6️⃣ Função: Consulta a API do Banco Central
+// ===============================
+function obterCotacao($moeda) {
+    $codigos = [
+        'USD' => 1,
+        'EUR' => 21619,
+        'GBP' => 21623,
+        'ARS' => 21627
+    ];
+
+    if (!isset($codigos[$moeda])) {
+        exibirMensagem("Código da moeda não encontrado.");
+        exit;
+    }
+
+    $codigoSerie = $codigos[$moeda];
+    $url = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.$codigoSerie/dados/ultimos/1?formato=json";
+
+    $json = @file_get_contents($url);
+    if (!$json) {
+        exibirMensagem("Erro ao consultar a API do Banco Central.");
+        exit;
+    }
+
+    $dados = json_decode($json, true);
+    return floatval(str_replace(',', '.', $dados[0]['valor']));
+}
+
