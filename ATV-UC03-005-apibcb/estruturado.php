@@ -46,3 +46,11 @@ function converterDolar($valor) {
     $cotacao = obterCotacao('USD');
     return $valor / $cotacao;
 }
+
+// ===============================
+// 4️⃣ Função: Converte para Euro
+// ===============================
+function converterEuro($valor) {
+    $cotacao = obterCotacao('EUR');
+    return $valor / $cotacao;
+}
