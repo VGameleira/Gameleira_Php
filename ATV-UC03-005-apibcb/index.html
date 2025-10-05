@@ -1,24 +1,27 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Conversor de Moedas - Banco Central</title>
+  <title>Conversor de Moedas BCB</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1> Conversor de Moedas (BCB)</h1>
+    <h1>Conversor de Moedas (BCB)</h1>
 
     <form action="api.php" method="POST">
-      <input type="number" name="valor" placeholder="Valor em BRL" required>
-      
-      <select name="moeda" required>
+      <label for="valor">Valor em Reais (BRL):</label>
+      <input type="number" name="valor" id="valor" step="0.01" required>
+
+      <label for="moeda">Converter para:</label>
+      <select name="moeda" id="moeda" required>
         <option value="USD">Dólar (USD)</option>
         <option value="EUR">Euro (EUR)</option>
         <option value="GBP">Libra (GBP)</option>
         <option value="ARS">Peso Argentino (ARS)</option>
-        <option value="CAD">Dólar Canadense (CAD)</option>
-        <option value="JPY">Iene (JPY)</option>
+        <option value="JPY">Iene Japonês (JPY)</option>
+        <option value="CNY">Yuan Chinês (CNY)</option>
+        <option value="BTC">Bitcoin (BTC)</option>
       </select>
 
       <button type="submit">Converter</button>

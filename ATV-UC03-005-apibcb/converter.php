@@ -19,7 +19,7 @@ $resultado = converterBRL($valor, $moeda);
 </head>
 <body>
 <div class="container">
-    <h1>💱 Resultado da Conversão</h1>
+    <h1> Resultado da Conversão</h1>
 
     <?php if (isset($resultado['erro'])): ?>
         <p class="erro"><?= htmlspecialchars($resultado['erro']) ?></p>
