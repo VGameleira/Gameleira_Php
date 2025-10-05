@@ -54,3 +54,12 @@ function converterEuro($valor) {
     $cotacao = obterCotacao('EUR');
     return $valor / $cotacao;
 }
+
+
+// ===============================
+// 5️⃣ Função: Converte para moeda personalizada
+// ===============================
+function converterMoeda($valor, $moeda) {
+    $cotacao = obterCotacao($moeda);
+    return $valor / $cotacao;
+}
