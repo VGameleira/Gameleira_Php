@@ -1,31 +1,72 @@
 <?php
 
-function calcularMedia(array $notas) {
-
-    $resultado = array_sum($notas) / count($notas);
-    return $resultado;
+function calcular($notasArray)
+{
+    return array_sum($notasArray) / count($notasArray);
 }
 
-function verificarAprovacao($media){
-    return $media>=7 ? "aprovado" : "reprovado";
+function valMedia($media)
+{
+    return $media >= 7 ? true : false;
 }
 
-$nome = trim($_GET['nome']);
-$notas = $_GET['notas'];
+function mostrarMensagem(string $mensagem): string
+{
+    return $mensagem;
+}
 
-// $media = array_sum($notas) / count($notas);
+function mostrarResultado(bool $resultado): string
+{
+    return $resultado ? "Parabéns, você foi aprovado!" : "Infelizmente, você foi reprovado.";
+}
 
-// $mensagemBoasVindas = "Olá, {$nome}! Sua média é: {$media}";
-// if ($media >= 7) {
-//     $mensagemResultado = "Parabéns, você foi aprovado!";
-// } else {
-//     $mensagemResultado =  "Infelizmente, você foi reprovado.";
-// }
+function mostrarResultadoFinal($mensagem, $resultado): string
+{
+    return "<p>{$mensagem}</p><p id='" . ($resultado ? "aprovado" : "reprovado") . "'>" . mostrarResultado($resultado) . "</p>";
+}
 
 
 
+
+// mostrar hora de atual com function exibir()
+function horas(){
+    date_default_timezone_set("America/Sao_Paulo");
+    $hj = date("h:i:sa");
+    $hj2 = date("Y-m-d",time());
+    $diaHora = "{$hj2} <br><br> {$hj}";
+    return $diaHora;
+}
+ 
+function validarEntrada($nome, $notas) {
+    if (isset($nome) && !empty($nome) && is_string($nome) && isset($notas) && is_array($notas) && count($notas) > 0) {
+        foreach ($notas as $nota) {
+            if (!is_numeric($nota) || $nota < 0 || $nota > 10) {
+                return false;
+            }
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
+$nome = isset($_GET['nome']) ? trim($_GET['nome']) : '';
+$notas = isset($_GET['notas']) ? $_GET['notas'] : [];
+
+if (validarEntrada($nome, $notas)) {
+    $media = calcular($notas);
+    $result = valMedia($media);
+} else {
+    header("Location: ../index.html");
+    exit();
+}
+
+$data = horas();
+
+mostrarMensagem(mensagem: "Olá, {$nome}! Sua média é: {$media}");
 
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -39,8 +80,9 @@ $notas = $_GET['notas'];
 <body>
     <main class="container">
         <h1>Performance do Aluno</h1>
-        <p><?= $mensagemBoasVindas ?></p>
-        <p id="<?= $media>=7 ? "aprovado" : "reprovado"; ?>"><?= $mensagemResultado ?></p>
+
+        <?= mostrarResultadoFinal(mostrarMensagem(mensagem: "Olá, {$nome}! Sua média é: {$media}"), $result) ?>
+        <p>Hoje é dia <?= $data ?></p>
     </main>
 </body>
 

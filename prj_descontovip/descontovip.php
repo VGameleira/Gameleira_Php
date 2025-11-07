@@ -21,6 +21,8 @@ if ($tipo == "vip") {
     echo "Valor das compras: R$ " . $compras . PHP_EOL . "<br>";
 }
 
+
+
 ?>
  
 <!DOCTYPE html>

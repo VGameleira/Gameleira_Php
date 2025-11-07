@@ -9,26 +9,24 @@
 </head>
 
 <body>
-<main class="container">
-    <h2>Calculadora de Média</h2>
-    <form action="./pages/naoestruturado.php" method="get">Nome:</label>
-        <input type="text" name="nome" id="nome" required>
+    <main class="container">
+        <h2>Calculadora de Média</h2>
+        <form action="./pages/estruturado.php" method="get">Nome:</label>
+            <input type="text" name="nome" id="nome">
 
-        <label for="nota1">Nota 1:</label>
-        <input type="number" name="notas[0]" id="nota1" min="0" max="10" step="0.05" required>
+            <label for="nota1">Nota 1:</label>
+            <input type="number" name="notas[0]" id="nota1" min="0" max="10" step="0.05" required>
 
-        <label for="nota2">Nota 2:</label>
-        <input type="number" name="notas[1]" id="nota2" min="0" max="10" step="0.05" required>
+            <label for="nota2">Nota 2:</label>
+            <input type="number" name="notas[1]" id="nota2" min="0" max="10" step="0.05" required>
+            <label for="nota3">Nota 3:</label>
+            <input type="number" name="notas[2]" id="nota3" min="0" max="10" step="0.05" required>
+            <label for="nota4">Nota 4:</label>
+            <input type="number" name="notas[3]" id="nota4" min="0" max="10" step="0.05" required>
 
-        <label for="nota3">Nota 3:</label>
-        <input type="number" name="notas[2]" id="nota3" min="0" max="10" step="0.05" required>
-
-        <label for="nota4">Nota 4:</label>
-        <input type="number" name="notas[3]" id="nota4" min="0" max="10" step="0.05" required>
-
-        <input type="submit" value="Calcular Média">
-    </form>
-</main>
+            <input type="submit" value="Calcular Média">
+        </form>
+    </main>
 </body>
 
 </html>

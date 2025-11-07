@@ -19,15 +19,10 @@
 
         public function mostrarInformacoes() {
             echo "<h2>Informações do Aluno:</h2>";
-            echo "Nome: " . $this->nome . "<br>";
-            echo "Cidade: " . $this->cidade . "<br>";
-            echo "Bairro: " . $this->bairro . "<br>";
-            echo "Curso: " . $this->curso . "<br>";
+            echo "Nome: " . htmlspecialchars($this->nome) . "<br>";
+            echo "Cidade: " . htmlspecialchars($this->cidade) . "<br>";
+            echo "Bairro: " . htmlspecialchars($this->bairro) . "<br>";
+            echo "Curso: " . htmlspecialchars( $this->curso) . "<br>";
         }
     }
-
-
-    // $aluno1 = new Aluno("João Silva", "São Paulo", "Centro", "Desenvolvimento para sistema");
-
-    // $aluno1->mostrarInformacoes();
     ?>
