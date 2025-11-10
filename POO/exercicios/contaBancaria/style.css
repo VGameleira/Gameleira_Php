@@ -1,29 +1,198 @@
+
+/* ===== ESTILOS GERAIS ===== */
+
+/* 
+   Estilo do corpo da página
+   Define a fonte padrão, cor de fundo e remove margens/espaçamentos padrão
+*/
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
+    font-family: Arial, sans-serif; /* Fonte limpa e legível */
+    background-color: #f0f0f0; /* Cinza claro para o fundo */
+    margin: 0; /* Remove margem padrão do navegador */
+    padding: 0; /* Remove padding padrão do navegador */
+    line-height: 1.6; /* Melhora a legibilidade do texto */
 }
+
+/* ===== CABEÇALHO ===== */
+
+/* 
+   Estilo do cabeçalho (header)
+   Aparece no topo de todas as páginas com o título principal
+*/
 header {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 0;
-    text-align: center;
+    background-color: #007bff; /* Azul profissional */
+    color: white; /* Texto branco para contraste */
+    padding: 20px 0; /* Espaçamento interno: 20px em cima e embaixo */
+    text-align: center; /* Centraliza o texto */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave para dar profundidade */
 }
+
+/* Estilo do título principal (h1) dentro do header */
+header h1 {
+    margin: 0; /* Remove margem padrão */
+    font-size: 28px; /* Tamanho da fonte */
+}
+
+/* Estilo do parágrafo dentro do header */
+header p {
+    margin: 5px 0 0 0; /* Pequena margem no topo */
+    font-size: 14px; /* Texto menor */
+    opacity: 0.9; /* Leve transparência */
+}
+
+/* ===== NAVEGAÇÃO ===== */
+
+/* 
+   Estilo da barra de navegação
+   Contém os links para as diferentes páginas
+*/
 nav {
-    background-color: #343a40;
-    padding: 10px;
-    text-align: center;
+    background-color: #343a40; /* Cinza escuro */
+    padding: 15px; /* Espaçamento interno */
+    text-align: center; /* Centraliza os links */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
 }
+
+/* Estilo dos links dentro da navegação */
 nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px;
-    font-size: 18px;
+    color: white; /* Texto branco */
+    text-decoration: none; /* Remove sublinhado padrão dos links */
+    margin: 0 15px; /* Espaçamento entre os links */
+    font-size: 18px; /* Tamanho da fonte */
+    padding: 8px 15px; /* Espaçamento interno do link */
+    border-radius: 5px; /* Bordas arredondadas */
+    transition: background-color 0.3s ease; /* Transição suave ao passar o mouse */
 }
+
+/* Estilo dos links quando o mouse passa por cima (hover) */
 nav a:hover {
-    text-decoration: underline;
+    background-color: #495057; /* Cinza mais claro ao passar o mouse */
+    text-decoration: none; /* Mantém sem sublinhado */
 }
+
+/* ===== CONTAINER PRINCIPAL ===== */
+
+/* 
+   Container que engloba o conteúdo principal da página
+   Adiciona espaçamento e limita a largura máxima
+*/
 .container {
-    padding: 20px;
+    padding: 30px; /* Espaçamento interno */
+    max-width: 800px; /* Largura máxima do conteúdo */
+    margin: 30px auto; /* Centraliza o container (auto nas laterais) */
+    background-color: white; /* Fundo branco */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+}
+
+/* Estilo dos títulos h2 dentro do container */
+.container h2 {
+    color: #343a40; /* Cor cinza escuro */
+    margin-bottom: 20px; /* Espaço abaixo do título */
+}
+
+/* Estilo dos títulos h3 dentro do container */
+.container h3 {
+    color: #007bff; /* Azul para destacar */
+    margin-top: 0; /* Remove margem superior */
+}
+
+/* ===== FORMULÁRIOS ===== */
+
+/* 
+   Estilos para os formulários de depósito, saque, etc.
+*/
+
+/* Estilo geral dos formulários */
+form {
+    margin: 20px 0; /* Espaçamento entre formulários */
+    padding: 15px; /* Espaçamento interno */
+    background-color: #f8f9fa; /* Fundo cinza muito claro */
+    border-radius: 8px; /* Bordas arredondadas */
+    border: 1px solid #dee2e6; /* Borda sutil */
+}
+
+/* Estilo dos rótulos (labels) dos campos */
+label {
+    display: block; /* Faz o label ocupar toda a linha */
+    margin-bottom: 5px; /* Espaço abaixo do label */
+    font-weight: bold; /* Texto em negrito */
+    color: #343a40; /* Cor cinza escuro */
+}
+
+/* Estilo dos campos de entrada (input) */
+input[type="number"] {
+    width: 100%; /* Ocupa toda a largura disponível */
+    padding: 10px; /* Espaçamento interno */
+    margin-bottom: 10px; /* Espaço abaixo do campo */
+    border: 1px solid #ced4da; /* Borda cinza */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 16px; /* Tamanho da fonte */
+    box-sizing: border-box; /* Inclui padding e border na largura total */
+}
+
+/* Estilo dos campos de entrada quando estão em foco (sendo digitados) */
+input[type="number"]:focus {
+    outline: none; /* Remove contorno padrão do navegador */
+    border-color: #007bff; /* Muda a cor da borda para azul */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3); /* Adiciona brilho azul */
+}
+
+/* Estilo dos botões (submit) */
+input[type="submit"] {
+    background-color: #007bff; /* Fundo azul */
+    color: white; /* Texto branco */
+    padding: 12px 25px; /* Espaçamento interno */
+    border: none; /* Remove borda padrão */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 16px; /* Tamanho da fonte */
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+    transition: background-color 0.3s ease; /* Transição suave de cor */
+}
+
+/* Estilo dos botões quando o mouse passa por cima */
+input[type="submit"]:hover {
+    background-color: #0056b3; /* Azul mais escuro */
+}
+
+/* Estilo dos botões quando são pressionados */
+input[type="submit"]:active {
+    transform: scale(0.98); /* Leve redução de tamanho ao clicar */
+}
+
+/* ===== PARÁGRAFOS E TEXTOS ===== */
+
+/* Estilo dos parágrafos fortes (strong) */
+p strong {
+    color: #007bff; /* Azul para destacar */
+}
+
+/* Estilo das listas não ordenadas */
+ul {
+    line-height: 1.8; /* Aumenta o espaçamento entre linhas */
+}
+
+/* ===== RESPONSIVIDADE ===== */
+
+/* 
+   Media query para telas menores (tablets e celulares)
+   Ajusta o layout para dispositivos móveis
+*/
+@media (max-width: 768px) {
+    /* Reduz o tamanho da fonte do cabeçalho */
+    header h1 {
+        font-size: 22px;
+    }
+    
+    /* Reduz o espaçamento dos links de navegação */
+    nav a {
+        margin: 5px;
+        font-size: 16px;
+    }
+    
+    /* Reduz o padding do container */
+    .container {
+        padding: 15px;
+        margin: 15px;
+    }
 }
