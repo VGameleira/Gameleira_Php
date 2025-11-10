@@ -1,0 +1,46 @@
+
+/* estilo.css */
+
+/* Estilos básicos para a página da escola */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f4f9;
+}
+
+/* Estilos para o contêiner principal */
+.container {
+    width: 80%;
+    margin: 40px auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilos para os títulos */
+h1 {
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 30px;
+}
+
+/* Estilos para a tabela de estudantes */
+table {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+
+/* Estilos para as células da tabela */
+table th, table td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 12px;
+}
