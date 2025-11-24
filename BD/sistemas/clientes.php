@@ -36,12 +36,14 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<title>Clientes - Sistema</title>
 	<link rel="stylesheet" href="../assets/css/style.css">
 </head>
+
 <body>
 	<div class="container">
 		<header>
@@ -68,10 +70,10 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 						<label>Bairro</label>
 						<input type="text" name="bairro" placeholder="Bairro">
 					</div>
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<label>Produto</label>
 						<input type="text" name="produto" placeholder="Produto de interesse">
-					</div>
+					</div> -->
 				</div>
 				<button type="submit" class="btn-submit">✅ Cadastrar Cliente</button>
 			</form>
@@ -94,4 +96,5 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	<script src="../assets/js/app.js"></script>
 	<script src="../assets/js/clientes.js"></script>
 </body>
+
 </html>

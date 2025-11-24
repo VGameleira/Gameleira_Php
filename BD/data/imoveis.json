@@ -1,0 +1,15 @@
+[
+    {
+        "tipo": "Apartamento",
+        "finalidade": "Venda",
+        "localizacao": "Rua Conselheiro Nebias,200",
+        "preco": 20000,
+        "area_cons": "1500",
+        "area_terreno": "60",
+        "qtd_quarto": 1,
+        "qtd_banheiro": 1,
+        "qtd_vaga": 1,
+        "descricao": "Apartamento para aluguel com 2 quartos, 1 banheiro, cozinha americana e área de serviço. Condomínio com piscina",
+        "id": 1
+    }
+]
