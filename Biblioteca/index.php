@@ -156,7 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
 
         <br>
-        <form action="" method="post">
+        <!-- <form action="" method="post">
             <input type="hidden" name="acao" value="login">
             <label for="email_login">Email:</label>
             <input type="email" id="email_login" name="email" required>
@@ -166,7 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <br><br>
 
             <input type="submit" value="Login">
-        </form>
+        </form> -->
     </div>
 </body>
 
