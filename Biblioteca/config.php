@@ -3,7 +3,7 @@
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'biblioteca');
 define('DB_USER', 'root');
-define('DB_PASS', 'usbw');
+define('DB_PASS', ''); // ← ALTERE AQUI: Coloque a senha do seu MySQL (geralmente vazia no XAMPP/WAMP)
 define('DB_CHARSET', 'utf8mb4');
 
 // Configurações de Upload
@@ -20,6 +20,10 @@ ini_set('session.cookie_samesite', 'Strict');
 // Timezone
 date_default_timezone_set('America/Sao_Paulo');
 
+// Habilitar exibição de erros (REMOVER EM PRODUÇÃO)
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Conexão com o Banco de Dados
 try {
     $dsn = sprintf('mysql:host=%s;dbname=%s;charset=%s', DB_HOST, DB_NAME, DB_CHARSET);
@@ -29,9 +33,33 @@ try {
         PDO::ATTR_EMULATE_PREPARES => false,
         PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
     ]);
+    
+    // Mensagem de sucesso (REMOVER EM PRODUÇÃO)
+    // echo "✓ Conexão com banco de dados estabelecida!";
+    
 } catch (PDOException $e) {
     error_log("Erro de conexão: " . $e->getMessage());
-    die("Erro ao conectar ao banco de dados. Tente novamente mais tarde.");
+    
+    // Mensagem mais detalhada para debug
+    if (ini_get('display_errors')) {
+        die("
+            <div style='font-family: Arial; padding: 20px; background: #f8d7da; border: 2px solid #dc3545; border-radius: 10px; margin: 20px;'>
+                <h2 style='color: #842029;'>❌ Erro de Conexão com Banco de Dados</h2>
+                <p><strong>Mensagem:</strong> " . $e->getMessage() . "</p>
+                <hr>
+                <h3>Verifique:</h3>
+                <ul>
+                    <li>O MySQL está rodando?</li>
+                    <li>O banco de dados '<strong>biblioteca</strong>' foi criado?</li>
+                    <li>Usuário: <strong>" . DB_USER . "</strong></li>
+                    <li>Senha: <strong>" . (DB_PASS ? '***' : '(vazia)') . "</strong></li>
+                    <li>Host: <strong>" . DB_HOST . "</strong></li>
+                </ul>
+            </div>
+        ");
+    } else {
+        die("Erro ao conectar ao banco de dados. Tente novamente mais tarde.");
+    }
 }
 
 // Funções Auxiliares

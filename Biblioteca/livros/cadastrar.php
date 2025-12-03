@@ -47,15 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Livro - Biblioteca</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <style>
-        .preview-image {
-            max-width: 200px;
-            margin: 10px 0;
-            border-radius: 8px;
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="../style.css">
+                                                   9
 </head>
 <body>
     <nav class="menu">

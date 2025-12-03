@@ -52,7 +52,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel - Sistema Biblioteca</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
     <style>
         .dashboard {
             max-width: 1200px;
@@ -233,7 +233,7 @@ try {
 
     <div class="dashboard">
         <div class="welcome-card">
-            <h1>👋 Olá, <?= sanitize_input($_SESSION['usuario_nome']) ?>!</h1>
+            <h1> Olá, <?= sanitize_input($_SESSION['usuario_nome']) ?>!</h1>
             <p>Bem-vindo ao Sistema de Biblioteca</p>
             <small>Tipo de conta: <?= is_admin() ? '⭐ Administrador' : '📖 Aluno' ?></small>
         </div>

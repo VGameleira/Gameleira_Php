@@ -1,61 +1,52 @@
 <?php
-require '../conexao.php';
+require_once '../config.php';
 session_start();
-
-// Verifica se está logado
-if(!isset($_SESSION['usuario'])){
-    header("location:../index.php");
-    exit;
-}
-
-// Verifica se é admin
-if($_SESSION['tipo'] !== 'admin'){
-    header("location:../painel.php");
-    exit;
-}
+require_admin();
 
 $mensagem = "";
 
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    $titulo = trim($_POST['titulo']);
-    $autor = trim($_POST['autor']);
-    $disponivel = isset($_POST['disponivel']) ? 1 : 0;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nome = trim($_POST['nome'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $senha = $_POST['senha'] ?? '';
+    $tipo = $_POST['tipo'] ?? 'aluno';
     
-    // Processar upload da imagem
-    $imagem = null;
-    if(isset($_FILES['imagem']) && $_FILES['imagem']['error'] === 0){
-        $pasta_destino = '../uploads/';
-        
-        // Criar pasta se não existir
-        if(!is_dir($pasta_destino)){
-            mkdir($pasta_destino, 0777, true);
-        }
-        
-        $nome_arquivo = time() . '_' . basename($_FILES['imagem']['name']);
-        $caminho_completo = $pasta_destino . $nome_arquivo;
-        
-        // Verificar tipo de arquivo
-        $tipos_permitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
-        if(in_array($_FILES['imagem']['type'], $tipos_permitidos)){
-            if(move_uploaded_file($_FILES['imagem']['tmp_name'], $caminho_completo)){
-                $imagem = 'uploads/' . $nome_arquivo;
+    if (empty($nome) || empty($email) || empty($senha)) {
+        $mensagem = show_message("Preencha todos os campos obrigatórios.", "erro");
+    } elseif (strlen($senha) < 6) {
+        $mensagem = show_message("Senha deve ter no mínimo 6 caracteres.", "erro");
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $mensagem = show_message("Email inválido.", "erro");
+    } else {
+        try {
+            // Verificar se email já existe
+            $sql = "SELECT id FROM usuarios WHERE email = :email";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([':email' => $email]);
+            
+            if ($stmt->fetch()) {
+                $mensagem = show_message("Email já cadastrado.", "erro");
+            } else {
+                $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+                
+                $sql = "INSERT INTO usuarios (nome, email, senha, tipo) 
+                        VALUES (:nome, :email, :senha, :tipo)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([
+                    ':nome' => $nome,
+                    ':email' => $email,
+                    ':senha' => $senha_hash,
+                    ':tipo' => $tipo
+                ]);
+                
+                $mensagem = show_message("Usuário cadastrado com sucesso!", "success");
+                $nome = $email = '';
             }
+            
+        } catch (Exception $e) {
+            error_log("Erro ao cadastrar usuário: " . $e->getMessage());
+            $mensagem = show_message($e->getMessage(), "erro");
         }
-    }
-    
-    try{
-        $sql = "INSERT INTO livros(titulo, autor, disponivel, imagem) VALUES(:titulo, :autor, :disponivel, :imagem)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ':titulo' => $titulo,
-            ':autor' => $autor,
-            ':disponivel' => $disponivel,
-            ':imagem' => $imagem
-        ]);
-        
-        $mensagem = "<p class='sucesso'>Livro cadastrado com sucesso!</p>";
-    }catch(PDOException $e){
-        $mensagem = "<p class='erro'>Erro ao cadastrar: " . $e->getMessage() . "</p>";
     }
 }
 ?>
@@ -64,22 +55,81 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Livro</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>Cadastrar Usuário - Biblioteca</title>
+    <link rel="stylesheet" href="..style.css">
 </head>
 <body>
+    <nav class="menu">
+        <div class="dropdown">
+            <button class="dropbtn">👥 Usuários</button>
+            <div class="dropdown-content">
+                <a href="cadastrar.php">📝 Cadastrar Usuário</a>
+                <a href="listar.php">📋 Listar Usuários</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">📚 Livros</button>
+            <div class="dropdown-content">
+                <a href="../livros/cadastrar.php">📝 Cadastrar Livro</a>
+                <a href="../livros/listar.php">📋 Listar Livros</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">📖 Aluguéis</button>
+            <div class="dropdown-content">
+                <a href="../alugueis/cadastrar.php">📋 Alugar Livro</a>
+                <a href="../alugueis/listar.php">📋 Listar Aluguéis</a>
+            </div>
+        </div>
+        <a href="../logout.php" class="logout">🚪 Sair</a>
+    </nav>
+
     <div class="container">
-        <h1>Cadastrar Livro</h1>
-        <?php echo $mensagem; ?>
-        <form method="POST" enctype="multipart/form-data">
-            <input type="text" name="titulo" placeholder="Título" required>
-            <input type="text" name="autor" placeholder="Autor" required>
-            <label style="display: block; margin: 10px 0;">
-                <input type="checkbox" name="disponivel" checked style="width: auto; display: inline-block;"> Disponível
-            </label>
-            <input type="file" name="imagem" accept="image/*">
-            <button type="submit">Cadastrar</button>
-            <a href="../painel.php" class="btn-voltar" style="display: block; text-align: center; margin-top: 10px;">Voltar ao Painel</a>
+        <h1>👥 Cadastrar Novo Usuário</h1>
+        
+        <?= $mensagem ?>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="nome">👤 Nome Completo *</label>
+                <input type="text" 
+                       id="nome" 
+                       name="nome" 
+                       value="<?= isset($nome) ? sanitize_input($nome) : '' ?>"
+                       placeholder="Digite o nome completo"
+                       required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">📧 Email *</label>
+                <input type="email" 
+                       id="email" 
+                       name="email" 
+                       value="<?= isset($email) ? sanitize_input($email) : '' ?>"
+                       placeholder="Digite o email"
+                       required>
+            </div>
+            
+            <div class="form-group">
+                <label for="senha">🔒 Senha *</label>
+                <input type="password" 
+                       id="senha" 
+                       name="senha" 
+                       placeholder="Digite a senha (mínimo 6 caracteres)"
+                       required>
+                <small>Mínimo de 6 caracteres</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="tipo">👑 Tipo de Usuário</label>
+                <select id="tipo" name="tipo">
+                    <option value="aluno">👨‍🎓 Aluno</option>
+                    <option value="admin">👑 Administrador</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn">✓ Cadastrar Usuário</button>
+            <a href="listar.php" class="btn-voltar">← Ver Usuários</a>
         </form>
     </div>
 </body>

@@ -96,69 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Biblioteca</title>
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-        .auth-container {
-            max-width: 450px;
-            margin: 80px auto;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-            overflow: hidden;
-        }
-        
-        .auth-header {
-            text-align: center;
-            padding: 30px 20px 20px;
-            background: linear-gradient(135deg, #0d6efd, #0b5ed7);
-            color: white;
-        }
-        
-        .auth-header h1 {
-            margin: 0;
-            font-size: 28px;
-            color: white;
-        }
-        
-        .auth-tabs {
-            display: flex;
-            background: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-        }
-        
-        .tab-btn {
-            flex: 1;
-            padding: 15px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            color: #6c757d;
-            transition: all 0.3s;
-        }
-        
-        .tab-btn.active {
-            background: white;
-            color: #0d6efd;
-            border-bottom: 3px solid #0d6efd;
-        }
-        
-        .tab-content {
-            display: none;
-            padding: 30px;
-            animation: fadeIn 0.3s;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="auth-container">
@@ -169,16 +107,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         <div class="auth-tabs">
             <button class="tab-btn <?= $acao_ativa == 'login' ? 'active' : '' ?>" onclick="switchTab('login')">
-                Entrar
+                🔐 Entrar
             </button>
             <button class="tab-btn <?= $acao_ativa == 'cadastro' ? 'active' : '' ?>" onclick="switchTab('cadastro')">
-                Cadastrar
+                📝 Cadastrar
             </button>
         </div>
         
         <?php if (!empty($mensagem)): ?>
             <div style="padding: 20px 30px 0;">
-                <p class="<?= $tipo_mensagem ?>"><?= sanitize_input($mensagem) ?></p>
+                <div class="<?= $tipo_mensagem ?>"><?= sanitize_input($mensagem) ?></div>
             </div>
         <?php endif; ?>
         
@@ -219,9 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-group">
                     <label for="senha">🔒 Senha</label>
                     <input type="password" id="senha" name="senha" placeholder="Mínimo 6 caracteres" required>
-                    <small style="color: #6c757d; display: block; margin-top: 5px;">
-                        A senha deve ter no mínimo 6 caracteres
-                    </small>
+                    <small>A senha deve ter no mínimo 6 caracteres</small>
                 </div>
                 
                 <button type="submit" class="btn">Cadastrar</button>
