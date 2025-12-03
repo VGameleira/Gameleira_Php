@@ -1,118 +1,87 @@
 <?php
-// criar um projeto sobre a criação de uma biblioteca. Segue o banco de dados.
-// CREATE DATABASE IF NOT EXISTS biblioteca;
-
-// USE biblioteca;
-
-// CREATE TABLE IF NOT EXISTS usuarios (
-//     id INT AUTO_INCREMENT PRIMARY KEY,
-//     nome VARCHAR(255) NOT NULL,
-//     email VARCHAR(255) NOT NULL UNIQUE,
-//     senha VARCHAR(255) NOT NULL,
-//     tipo ENUM('admin', 'aluno') NOT NULL
-// );
-
-// CREATE TABLE IF NOT EXISTS livros (
-//     id INT AUTO_INCREMENT PRIMARY KEY,
-//     titulo VARCHAR(255) NOT NULL,
-//     autor VARCHAR(255) NOT NULL,
-//     disponivel BOOLEAN DEFAULT TRUE,
-//     imagem VARCHAR(255) DEFAULT NULL
-// );
-
-// CREATE TABLE IF NOT EXISTS alugueis (
-//     id INT AUTO_INCREMENT PRIMARY KEY,
-//     id_usuario INT,
-//     id_livro INT,
-//     data_aluguel DATE,
-//     data_devolucao DATE,
-//     devolvido BOOLEAN DEFAULT FALSE,
-//     FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
-//     FOREIGN KEY (id_livro) REFERENCES livros(id)
-// );
-// Inclui o arquivo de conexão com o banco de dados
-require_once 'conexao.php';
-
+require_once 'config.php';
 session_start();
 
-// Se usuário já está logado, redireciona para painel
-if (isset($_SESSION['id_usuario'])) {
-    header("Location: painel.php");
-    exit();
+// Redirecionar se já estiver logado
+if (is_logged_in()) {
+    redirect('painel.php');
 }
 
 $mensagem = "";
 $tipo_mensagem = "";
+$acao_ativa = 'login';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['acao'])) {
         if ($_POST['acao'] == 'cadastro') {
-            // CADASTRO
+            $acao_ativa = 'cadastro';
             $nome = trim($_POST['nome'] ?? '');
             $email = trim($_POST['email'] ?? '');
             $senha = $_POST['senha'] ?? '';
 
             if (empty($nome) || empty($email) || empty($senha)) {
-                $mensagem = "Erro: Preencha todos os campos!";
+                $mensagem = "Preencha todos os campos!";
                 $tipo_mensagem = "erro";
             } elseif (strlen($senha) < 6) {
-                $mensagem = "Erro: Senha deve ter no mínimo 6 caracteres!";
+                $mensagem = "Senha deve ter no mínimo 6 caracteres!";
+                $tipo_mensagem = "erro";
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $mensagem = "Email inválido!";
                 $tipo_mensagem = "erro";
             } else {
-                $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-
                 try {
                     $sql = "SELECT id FROM usuarios WHERE email = :email";
-                    $stmt = $conexao->prepare($sql);
+                    $stmt = $pdo->prepare($sql);
                     $stmt->execute([':email' => $email]);
-                    $usuarios = $stmt->fetch(PDO::FETCH_ASSOC);
                     
-                    if ($usuarios) {
-                        $mensagem = "Erro: Email já cadastrado!";
+                    if ($stmt->fetch()) {
+                        $mensagem = "Email já cadastrado!";
                         $tipo_mensagem = "erro";
                     } else {
-                        $stmt = $conexao->prepare("INSERT INTO usuarios (nome, email, senha, tipo) VALUES (:nome, :email, :senha, 'aluno')");
-                        $stmt->bindParam(':nome', $nome);
-                        $stmt->bindParam(':email', $email);
-                        $stmt->bindParam(':senha', $senha_hash);
+                        $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+                        $sql = "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (:nome, :email, :senha, 'aluno')";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute([
+                            ':nome' => $nome,
+                            ':email' => $email,
+                            ':senha' => $senha_hash
+                        ]);
                         
-                        if ($stmt->execute()) {
-                            $mensagem = "✓ Cadastro realizado com sucesso! Faça login.";
-                            $tipo_mensagem = "sucesso";
-                        }
+                        $mensagem = "✓ Cadastro realizado com sucesso! Faça login.";
+                        $tipo_mensagem = "sucesso";
+                        $acao_ativa = 'login';
                     }
                 } catch (PDOException $e) {
+                    error_log("Erro no cadastro: " . $e->getMessage());
                     $mensagem = "Erro ao registrar usuário!";
                     $tipo_mensagem = "erro";
                 }
             }
         } elseif ($_POST['acao'] == 'login') {
-            // LOGIN
             $email = trim($_POST['email'] ?? '');
             $senha = $_POST['senha'] ?? '';
 
             if (empty($email) || empty($senha)) {
-                $mensagem = "Erro: Preencha email e senha!";
+                $mensagem = "Preencha email e senha!";
                 $tipo_mensagem = "erro";
             } else {
                 try {
                     $sql = "SELECT id, nome, tipo, senha FROM usuarios WHERE email = :email";
-                    $stmt = $conexao->prepare($sql);
+                    $stmt = $pdo->prepare($sql);
                     $stmt->execute([':email' => $email]);
-                    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $usuario = $stmt->fetch();
                     
                     if ($usuario && password_verify($senha, $usuario['senha'])) {
-                        // Autenticação bem-sucedida
-                        $_SESSION['id_usuario'] = $usuario['id'];
-                        $_SESSION['nome'] = $usuario['nome'];
+                        $_SESSION['usuario_id'] = $usuario['id'];
+                        $_SESSION['usuario_nome'] = $usuario['nome'];
                         $_SESSION['tipo'] = $usuario['tipo'];
-                        header("Location: painel.php");
-                        exit();
+                        redirect('painel.php');
                     } else {
-                        $mensagem = "Erro: Email ou senha incorretos!";
+                        $mensagem = "Email ou senha incorretos!";
                         $tipo_mensagem = "erro";
                     }
                 } catch (PDOException $e) {
+                    error_log("Erro no login: " . $e->getMessage());
                     $mensagem = "Erro ao fazer login!";
                     $tipo_mensagem = "erro";
                 }
@@ -120,54 +89,154 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Biblioteca</title>
+    <title>Sistema de Biblioteca</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .auth-container {
+            max-width: 450px;
+            margin: 80px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+        
+        .auth-header {
+            text-align: center;
+            padding: 30px 20px 20px;
+            background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+            color: white;
+        }
+        
+        .auth-header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: white;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #0d6efd;
+            border-bottom: 3px solid #0d6efd;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.3s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>Bem-vindo à Biblioteca</h1>
-        <?php if (!empty($mensagem)) : ?>
-            <p class="<?php echo $tipo_mensagem; ?>"><?php echo htmlspecialchars($mensagem); ?></p>
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1>📚 Sistema de Biblioteca</h1>
+            <p style="margin: 10px 0 0; opacity: 0.9;">Bem-vindo! Faça login ou cadastre-se</p>
+        </div>
+        
+        <div class="auth-tabs">
+            <button class="tab-btn <?= $acao_ativa == 'login' ? 'active' : '' ?>" onclick="switchTab('login')">
+                Entrar
+            </button>
+            <button class="tab-btn <?= $acao_ativa == 'cadastro' ? 'active' : '' ?>" onclick="switchTab('cadastro')">
+                Cadastrar
+            </button>
+        </div>
+        
+        <?php if (!empty($mensagem)): ?>
+            <div style="padding: 20px 30px 0;">
+                <p class="<?= $tipo_mensagem ?>"><?= sanitize_input($mensagem) ?></p>
+            </div>
         <?php endif; ?>
-
-        <form action="" method="post">
-            <input type="hidden" name="acao" value="cadastro">
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome" required>
-            <br><br>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            <br><br>
-            <label for="senha">Senha:</label>
-            <input type="password" id="senha" name="senha" required>
-            <br><br>
-
-            <input type="submit" value="Cadastrar">
-        </form>
-
-        <br>
-        <!-- <form action="" method="post">
-            <input type="hidden" name="acao" value="login">
-            <label for="email_login">Email:</label>
-            <input type="email" id="email_login" name="email" required>
-            <br><br>
-            <label for="senha_login">Senha:</label>
-            <input type="password" id="senha_login" name="senha" required>
-            <br><br>
-
-            <input type="submit" value="Login">
-        </form> -->
+        
+        <!-- TAB LOGIN -->
+        <div id="tab-login" class="tab-content <?= $acao_ativa == 'login' ? 'active' : '' ?>">
+            <form method="POST">
+                <input type="hidden" name="acao" value="login">
+                
+                <div class="form-group">
+                    <label for="email_login">📧 Email</label>
+                    <input type="email" id="email_login" name="email" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="senha_login">🔒 Senha</label>
+                    <input type="password" id="senha_login" name="senha" placeholder="Digite sua senha" required>
+                </div>
+                
+                <button type="submit" class="btn">Entrar</button>
+            </form>
+        </div>
+        
+        <!-- TAB CADASTRO -->
+        <div id="tab-cadastro" class="tab-content <?= $acao_ativa == 'cadastro' ? 'active' : '' ?>">
+            <form method="POST">
+                <input type="hidden" name="acao" value="cadastro">
+                
+                <div class="form-group">
+                    <label for="nome">👤 Nome Completo</label>
+                    <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">📧 Email</label>
+                    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="senha">🔒 Senha</label>
+                    <input type="password" id="senha" name="senha" placeholder="Mínimo 6 caracteres" required>
+                    <small style="color: #6c757d; display: block; margin-top: 5px;">
+                        A senha deve ter no mínimo 6 caracteres
+                    </small>
+                </div>
+                
+                <button type="submit" class="btn">Cadastrar</button>
+            </form>
+        </div>
     </div>
+    
+    <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`button[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+    </script>
 </body>
-
 </html>

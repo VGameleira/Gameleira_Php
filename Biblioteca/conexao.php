@@ -2,7 +2,7 @@
 
 $host = "localhost";
 $usuario = "root";
-$senha = "usbw";
+$senha = "";
 $banco = "biblioteca";
 
 try {
