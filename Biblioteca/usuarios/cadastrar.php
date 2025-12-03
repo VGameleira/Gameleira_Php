@@ -1,124 +1,86 @@
 <?php
-require_once '../conexao.php';
+require '../conexao.php';
 session_start();
 
-if (!isset($_SESSION['id_usuario'])) {
-    header("Location: ../index.php");
-    exit();
+// Verifica se está logado
+if(!isset($_SESSION['usuario'])){
+    header("location:../index.php");
+    exit;
+}
+
+// Verifica se é admin
+if($_SESSION['tipo'] !== 'admin'){
+    header("location:../painel.php");
+    exit;
 }
 
 $mensagem = "";
-$tipo_mensagem = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome = trim($_POST['nome'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $senha = $_POST['senha'] ?? '';
-    $tipo = $_POST['tipo'] ?? 'aluno';
-
-    if (empty($nome) || empty($email) || empty($senha)) {
-        $mensagem = "Erro: Preencha todos os campos!";
-        $tipo_mensagem = "erro";
-    } elseif (strlen($senha) < 6) {
-        $mensagem = "Erro: Senha deve ter no mínimo 6 caracteres!";
-        $tipo_mensagem = "erro";
-    } else {
-        $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-
-        try {
-            // Verifica se email já existe
-            $sql = "SELECT id FROM usuarios WHERE email = :email";
-            $stmt = $conexao->prepare($sql);
-            $stmt->execute([':email' => $email]);
-            $usuario_existe = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if ($usuario_existe) {
-                $mensagem = "Erro: Email já cadastrado!";
-                $tipo_mensagem = "erro";
-            } else {
-                $stmt = $conexao->prepare("INSERT INTO usuarios (nome, email, senha, tipo) VALUES (:nome, :email, :senha, :tipo)");
-                $stmt->bindParam(':nome', $nome);
-                $stmt->bindParam(':email', $email);
-                $stmt->bindParam(':senha', $senha_hash);
-                $stmt->bindParam(':tipo', $tipo);
-                
-                if ($stmt->execute()) {
-                    $mensagem = "✓ Usuário cadastrado com sucesso!";
-                    $tipo_mensagem = "sucesso";
-                }
-            }
-        } catch (PDOException $e) {
-            $mensagem = "Erro ao cadastrar usuário!";
-            $tipo_mensagem = "erro";
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $titulo = trim($_POST['titulo']);
+    $autor = trim($_POST['autor']);
+    $disponivel = isset($_POST['disponivel']) ? 1 : 0;
+    
+    // Processar upload da imagem
+    $imagem = null;
+    if(isset($_FILES['imagem']) && $_FILES['imagem']['error'] === 0){
+        $pasta_destino = '../uploads/';
+        
+        // Criar pasta se não existir
+        if(!is_dir($pasta_destino)){
+            mkdir($pasta_destino, 0777, true);
         }
+        
+        $nome_arquivo = time() . '_' . basename($_FILES['imagem']['name']);
+        $caminho_completo = $pasta_destino . $nome_arquivo;
+        
+        // Verificar tipo de arquivo
+        $tipos_permitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+        if(in_array($_FILES['imagem']['type'], $tipos_permitidos)){
+            if(move_uploaded_file($_FILES['imagem']['tmp_name'], $caminho_completo)){
+                $imagem = 'uploads/' . $nome_arquivo;
+            }
+        }
+    }
+    
+    try{
+        $sql = "INSERT INTO livros(titulo, autor, disponivel, imagem) VALUES(:titulo, :autor, :disponivel, :imagem)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':titulo' => $titulo,
+            ':autor' => $autor,
+            ':disponivel' => $disponivel,
+            ':imagem' => $imagem
+        ]);
+        
+        $mensagem = "<p class='sucesso'>Livro cadastrado com sucesso!</p>";
+    }catch(PDOException $e){
+        $mensagem = "<p class='erro'>Erro ao cadastrar: " . $e->getMessage() . "</p>";
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../style.css">
-    <title>Cadastrar Usuário - Biblioteca</title>
+    <title>Cadastrar Livro</title>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <nav class="menu">
-        <div class="dropdown">
-            <button class="dropbtn">Usuários</button>
-            <div class="dropdown-content">
-                <a href="cadastrar.php">Cadastrar Usuário</a>
-                <a href="listar.php">Listar Usuários</a>
-            </div>
-        </div>
-
-        <div class="dropdown">
-            <button class="dropbtn">Livros</button>
-            <div class="dropdown-content">
-                <a href="../livros/cadastrar.php">Cadastrar Livro</a>
-                <a href="../livros/listar.php">Listar Livros</a>
-            </div>
-        </div>
-
-        <div class="dropdown">
-            <button class="dropbtn">Aluguéis</button>
-            <div class="dropdown-content">
-                <a href="../aluguel/listar.php">Meus Aluguéis</a>
-                <a href="../aluguel/historico.php">Histórico</a>
-            </div>
-        </div>
-
-        <a href="../logout.php" class="logout">Sair</a>
-    </nav>
-
     <div class="container">
-        <h1>Cadastrar Usuário</h1>
-        
-        <?php if (!empty($mensagem)) : ?>
-            <p class="<?php echo $tipo_mensagem; ?>"><?php echo htmlspecialchars($mensagem); ?></p>
-        <?php endif; ?>
-
-        <form action="" method="post">
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="senha">Senha:</label>
-            <input type="password" id="senha" name="senha" required>
-
-            <label for="tipo">Tipo de Usuário:</label>
-            <select name="tipo" id="tipo" required>
-                <option value="aluno">Aluno</option>
-                <option value="admin">Administrador</option>
-            </select>
-
+        <h1>Cadastrar Livro</h1>
+        <?php echo $mensagem; ?>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="text" name="titulo" placeholder="Título" required>
+            <input type="text" name="autor" placeholder="Autor" required>
+            <label style="display: block; margin: 10px 0;">
+                <input type="checkbox" name="disponivel" checked style="width: auto; display: inline-block;"> Disponível
+            </label>
+            <input type="file" name="imagem" accept="image/*">
             <button type="submit">Cadastrar</button>
+            <a href="../painel.php" class="btn-voltar" style="display: block; text-align: center; margin-top: 10px;">Voltar ao Painel</a>
         </form>
-
-        <a href="../painel.php" class="btn-voltar">Voltar ao Painel</a>
     </div>
 </body>
 </html>

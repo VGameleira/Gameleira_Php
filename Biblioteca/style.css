@@ -490,3 +490,43 @@ Repetição da animação fadeIn
     to { opacity: 1; transform: translateY(0); }
 }
  
+
+
+   .info-box {
+            background: #cfe2ff;
+            border-left: 4px solid #0d6efd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #084298;
+        }
+        
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .livro-preview {
+            display: none;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .livro-preview.show {
+            display: block;
+        }
+        
+        .livro-preview img {
+            max-width: 150px;
+            border-radius: 8px;
+            margin-right: 15px;
+            float: left;
+        }
+        
+        .livro-preview-info h3 {
+            margin: 0 0 10px 0;
+            color: #0d6efd;
+        }
