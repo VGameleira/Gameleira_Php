@@ -1,9 +1,7 @@
 -- ============================================
 -- CRIAR BANCO DE DADOS
 -- ============================================
-CREATE DATABASE IF NOT EXISTS biblioteca 
-CHARACTER SET utf8mb4 
-COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS biblioteca;
 
 USE biblioteca;
 
@@ -19,7 +17,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_email (email),
     INDEX idx_tipo (tipo)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+);
 
 -- ============================================
 -- TABELA DE LIVROS
@@ -34,7 +32,7 @@ CREATE TABLE IF NOT EXISTS livros (
     INDEX idx_titulo (titulo),
     INDEX idx_autor (autor),
     INDEX idx_disponivel (disponivel)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+);
 
 -- ============================================
 -- TABELA DE ALUGUÉIS
@@ -53,26 +51,24 @@ CREATE TABLE IF NOT EXISTS alugueis (
     INDEX idx_livro (id_livro),
     INDEX idx_devolvido (devolvido),
     INDEX idx_data_devolucao (data_devolucao)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+);
 
 -- ============================================
 -- DADOS INICIAIS
 -- ============================================
 
--- Inserir usuário ADMIN padrão
--- Email: admin@biblioteca.com
--- Senha: admin123
+-- Inserir usuário ADMIN padrão (senha: admin123)
 INSERT INTO usuarios (nome, email, senha, tipo) 
 VALUES (
     'Administrador', 
     'admin@biblioteca.com', 
-    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 
+    'admin123', 
     'admin'
 );
 
 -- Inserir usuário ALUNO de teste
 -- Email: aluno@teste.com
--- Senha: aluno123
+-- Senha: aluno123 (hash de exemplo)
 INSERT INTO usuarios (nome, email, senha, tipo) 
 VALUES (
     'Aluno Teste', 

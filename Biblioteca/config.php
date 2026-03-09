@@ -1,9 +1,9 @@
 <?php
 // Configurações do Sistema
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'biblioteca');
-define('DB_USER', 'root');
-define('DB_PASS', ''); // ← ALTERE AQUI: Coloque a senha do seu MySQL (geralmente vazia no XAMPP/WAMP)
+define('DB_HOST', 'sql111.infinityfree.com');
+define('DB_NAME', 'if0_41345258_biblioteca');
+define('DB_USER', 'if0_41345258');
+define('DB_PASS', '0V8Sv0WSa5szv'); // ← ALTERE AQUI: Coloque a senha do seu MySQL (geralmente vazia no XAMPP/WAMP)
 define('DB_CHARSET', 'utf8mb4');
 
 // Configurações de Upload

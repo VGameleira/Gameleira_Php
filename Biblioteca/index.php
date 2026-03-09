@@ -7,6 +7,22 @@ if (is_logged_in()) {
     redirect('painel.php');
 }
 
+// Verificar se há admin no sistema
+$tem_admin = false;
+try {
+    $sql = "SELECT COUNT(*) as total FROM usuarios WHERE tipo = 'admin'";
+    $resultado = $pdo->query($sql)->fetch();
+    $tem_admin = $resultado['total'] > 0;
+} catch (PDOException $e) {
+    // Se erro, assume que tem admin para segurança
+    $tem_admin = true;
+}
+
+// Redirecionar para criar admin se não existir nenhum admin
+if (!$tem_admin) {
+    redirect('criar_admin.php');
+}
+
 $mensagem = "";
 $tipo_mensagem = "";
 $acao_ativa = 'login';
@@ -18,7 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $nome = trim($_POST['nome'] ?? '');
             $email = trim($_POST['email'] ?? '');
             $senha = $_POST['senha'] ?? '';
-
+            $tipo = $_POST['tipo'] ?? 'aluno';
+            
             if (empty($nome) || empty($email) || empty($senha)) {
                 $mensagem = "Preencha todos os campos!";
                 $tipo_mensagem = "erro";
@@ -39,12 +56,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $tipo_mensagem = "erro";
                     } else {
                         $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-                        $sql = "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (:nome, :email, :senha, 'aluno')";
+                        $sql = "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (:nome, :email, :senha, :tipo)";
                         $stmt = $pdo->prepare($sql);
                         $stmt->execute([
                             ':nome' => $nome,
                             ':email' => $email,
-                            ':senha' => $senha_hash
+                            ':senha' => $senha_hash,
+                            ':tipo' => $tipo
                         ]);
                         
                         $mensagem = "✓ Cadastro realizado com sucesso! Faça login.";
@@ -70,12 +88,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt = $pdo->prepare($sql);
                     $stmt->execute([':email' => $email]);
                     $usuario = $stmt->fetch();
-                    
-                    if ($usuario && password_verify($senha, $usuario['senha'])) {
-                        $_SESSION['usuario_id'] = $usuario['id'];
-                        $_SESSION['usuario_nome'] = $usuario['nome'];
-                        $_SESSION['tipo'] = $usuario['tipo'];
-                        redirect('painel.php');
+
+                    if ($usuario) {
+                        $senha_hash = $usuario['senha'];
+                        $valido = false;
+
+                        // senha já está em hash compatível?
+                        if (password_verify($senha, $senha_hash)) {
+                            $valido = true;
+                        }
+                        // caso o campo contenha texto plano (usuário criado manualmente sem hash)
+                        elseif ($senha === $senha_hash) {
+                            $valido = true;
+
+                            // atualizar registro com hash seguro
+                            $nova_hash = password_hash($senha, PASSWORD_DEFAULT);
+                            $sql2 = "UPDATE usuarios SET senha = :senha WHERE id = :id";
+                            $stmt2 = $pdo->prepare($sql2);
+                            $stmt2->execute([
+                                ':senha' => $nova_hash,
+                                ':id'    => $usuario['id']
+                            ]);
+                        }
+
+                        if ($valido) {
+                            $_SESSION['usuario_id']   = $usuario['id'];
+                            $_SESSION['usuario_nome'] = $usuario['nome'];
+                            $_SESSION['tipo']         = $usuario['tipo'];
+                            redirect('painel.php');
+                        } else {
+                            $mensagem = "Email ou senha incorretos!";
+                            $tipo_mensagem = "erro";
+                        }
                     } else {
                         $mensagem = "Email ou senha incorretos!";
                         $tipo_mensagem = "erro";
@@ -160,8 +204,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <small>A senha deve ter no mínimo 6 caracteres</small>
                 </div>
                 
+                <?php if (!$tem_admin): ?>
+                <div class="form-group">
+                    <label for="tipo">👑 Tipo de Usuário</label>
+                    <select id="tipo" name="tipo">
+                        <option value="aluno">👨‍🎓 Aluno</option>
+                        <option value="admin">👑 Administrador</option>
+                    </select>
+                    <small>Como é o primeiro usuário, você pode criar um administrador</small>
+                </div>
+                <?php endif; ?>
+                
                 <button type="submit" class="btn">Cadastrar</button>
             </form>
+            
+            <!-- Botão para criar administrador -->
+            <div style="margin-top: 20px; text-align: center; border-top: 1px solid #e5e7eb; padding-top: 20px;">
+                <a href="criar_admin.php" class="btn" style="background: linear-gradient(135deg, #8b5cf6, #a855f7); width: 100%; margin: 0;">
+                    👑 Criar Administrador
+                </a>
+                <small style="display: block; margin-top: 10px; color: #6c757d;">
+                    Acesse para criar uma conta de administrador
+                </small>
+            </div>
         </div>
     </div>
     
